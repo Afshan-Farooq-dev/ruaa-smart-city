@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow-lg">
+                <div class="card-header bg-gradient" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <h2 class="text-white mb-0">
+                        <i class="fas fa-cog"></i> Notification Settings
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div id="success-message" class="alert alert-success d-none" role="alert">
+                        <i class="fas fa-check-circle"></i> Settings updated successfully!
+                    </div>
+                    
+                    <form id="settings-form">
+                        {% csrf_token %}
+                        
+                        <!-- Email Notification Types -->
+                        <h4 class="mb-3"><i class="fas fa-envelope"></i> Email Notifications</h4>
+                        
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="email_traffic_alerts" 
+                                   name="email_traffic_alerts" {% if profile.email_traffic_alerts %}checked{% endif %}>
+                            <label class="form-check-label" for="email_traffic_alerts">
+                                <strong>Traffic Alerts</strong>
+                                <br><small class="text-muted">Get notified about traffic conditions on your subscribed routes</small>
+                            </label>
+                        </div>
+                        
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="email_weather_alerts" 
+                                   name="email_weather_alerts" {% if profile.email_weather_alerts %}checked{% endif %}>
+                            <label class="form-check-label" for="email_weather_alerts">
+                                <strong>Weather Alerts</strong>
+                                <br><small class="text-muted">Receive severe weather warnings and daily forecasts</small>
+                            </label>
+                        </div>
+                        
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="email_tourism_digest" 
+                                   name="email_tourism_digest" {% if profile.email_tourism_digest %}checked{% endif %}>
+                            <label class="form-check-label" for="email_tourism_digest">
+                                <strong>Tourism Digest</strong>
+                                <br><small class="text-muted">Weekly newsletter with new attractions and recommendations</small>
+                            </label>
+                        </div>
+                        
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="email_service_updates" 
+                                   name="email_service_updates" {% if profile.email_service_updates %}checked{% endif %}>
+                            <label class="form-check-label" for="email_service_updates">
+                                <strong>Service Updates</strong>
+                                <br><small class="text-muted">Hospital closures, facility updates, and emergency alerts</small>
+                            </label>
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <!-- Email Frequency -->
+                        <h4 class="mb-3"><i class="fas fa-clock"></i> Email Frequency</h4>
+                        <select class="form-select mb-4" id="email_frequency" name="email_frequency">
+                            <option value="instant" {% if profile.email_frequency == 'instant' %}selected{% endif %}>Instant (as they happen)</option>
+                            <option value="daily" {% if profile.email_frequency == 'daily' %}selected{% endif %}>Daily Digest</option>
+                            <option value="weekly" {% if profile.email_frequency == 'weekly' %}selected{% endif %}>Weekly Summary</option>
+                        </select>
+                        
+                        <hr class="my-4">
+                        
+                        <!-- Route Subscriptions -->
+                        <h4 class="mb-3"><i class="fas fa-road"></i> Traffic Route Subscriptions</h4>
+                        <p class="text-muted">Select routes you use frequently to receive traffic alerts:</p>
+                        
+                        <div class="row">
+                            {% for route in all_routes %}
+                            <div class="col-md-6 mb-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" 
+                                           name="subscribed_routes" value="{{ route.name }}" 
+                                           id="route_{{ forloop.counter }}"
+                                           {% if route.name in profile.subscribed_routes %}checked{% endif %}>
+                                    <label class="form-check-label" for="route_{{ forloop.counter }}">
+                                        {{ route.name }}
+                                        <span class="badge bg-secondary">{{ route.city }}</span>
+                                    </label>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <!-- Save Button -->
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save"></i> Save Settings
+                            </button>
+                            <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left"></i> Back to Dashboard
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Info Card -->
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5><i class="fas fa-info-circle"></i> About Email Notifications</h5>
+                    <ul class="mb-0">
+                        <li><strong>Traffic Alerts:</strong> Get notified when traffic conditions change on your subscribed routes</li>
+                        <li><strong>Weather Alerts:</strong> Severe weather warnings and daily forecasts for your city</li>
+                        <li><strong>Tourism Digest:</strong> Weekly highlights of new attractions and personalized recommendations</li>
+                        <li><strong>Service Updates:</strong> Important updates about healthcare facilities and emergency services</li>
+                    </ul>
+                    <p class="text-muted mt-3 mb-0">
+                        <small>Currently using: <strong>{{ user.email }}</strong></small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.form-switch .form-check-input {
+    width: 3em;
+    height: 1.5em;
+}
+.form-check-label strong {
+    color: #333;
+}
+.bg-gradient {
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+</style>
+
+<script>
+document.getElementById('settings-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    
+    fetch('{% url "settings" %}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const successMsg = document.getElementById('success-message');
+            successMsg.classList.remove('d-none');
+            setTimeout(() => {
+                successMsg.classList.add('d-none');
+            }, 3000);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to save settings. Please try again.');
+    });
+});
+</script>
+{% endblock %}

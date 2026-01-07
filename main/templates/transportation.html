@@ -1,0 +1,314 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Public Transportation — Ruaa Smart City{% endblock %}
+
+{% block content %}
+<div class="app-wrapper">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <img src="{% static 'Ruaa2.png' %}" alt="Ruaa Logo" />
+      </div>
+      <div class="sidebar-brand">
+        <h1>Ruaa</h1>
+        <p>Smart City</p>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <a href="{% url 'dashboard' %}" class="nav-link">
+          <i class="fas fa-home"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="{% url 'traffic' %}" class="nav-link">
+          <i class="fas fa-car"></i>
+          <span>Traffic</span>
+        </a>
+        <a href="{% url 'weather' %}" class="nav-link">
+          <i class="fas fa-cloud-sun"></i>
+          <span>Weather</span>
+        </a>
+        <a href="{% url 'services' %}" class="nav-link">
+          <i class="fas fa-hospital"></i>
+          <span>Healthcare</span>
+        </a>
+        <a href="{% url 'tourism' %}" class="nav-link">
+          <i class="fas fa-landmark"></i>
+          <span>Tourism</span>
+        </a>
+        <a href="{% url 'transportation' %}" class="nav-link active">
+          <i class="fas fa-subway"></i>
+          <span>Transportation</span>
+        </a>
+        <a href="{% url 'map' %}" class="nav-link">
+          <i class="fas fa-map"></i>
+          <span>City Map</span>
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-profile">
+        <div class="user-avatar">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="user-info">
+          <div class="user-name">{{ user.username }}</div>
+          <div class="user-role">Citizen</div>
+        </div>
+        <form method="post" action="{% url 'logout' %}" style="margin: 0;">
+          {% csrf_token %}
+          <button type="submit" class="logout-btn" title="Logout">
+            <i class="fas fa-sign-out-alt"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <div class="page-title">
+        <h2><i class="fas fa-subway me-2" style="color: var(--brand-green);"></i>Public Transportation</h2>
+        <p>Efficient, Modern, and Connected Transit System</p>
+        <div class="vision-badge" style="margin-top: 0.5rem;">
+          <i class="fas fa-flag"></i>
+          Vision 2030 - Smart Mobility
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content-area">
+      <!-- Metro Section -->
+      <div class="transport-section">
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="fas fa-train me-2"></i>Riyadh Metro - دليل مترو الرياض</h3>
+          </div>
+          <div class="card-body">
+            <div style="background: linear-gradient(135deg, var(--brand-light-green), #F8F5F0); padding: 1.5rem; border-radius: 0.75rem; margin-bottom: 1.5rem;">
+              <h4 style="color: var(--brand-green); margin-bottom: 0.5rem;">
+                <i class="fas fa-info-circle me-2"></i>Metro Overview
+              </h4>
+              <p style="margin: 0; color: var(--text-secondary);">
+                The Riyadh Metro is one of the world's largest and most advanced metro systems, featuring 6 lines covering 176 km with 85 stations. 
+                Experience fast, comfortable, and sustainable urban mobility.
+              </p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem;">
+              {% for line in transportation.metro %}
+              <div class="route-card">
+                <div class="route-header">
+                  <div class="route-icon">
+                    <i class="fas fa-train"></i>
+                  </div>
+                  <div class="route-info">
+                    <div class="route-name">{{ line.line }}</div>
+                    <div class="route-schedule">{{ line.stations }} Stations</div>
+                  </div>
+                  <span class="badge badge-success">Operating</span>
+                </div>
+                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 2px solid var(--border);">
+                  <div style="margin-bottom: 0.75rem;">
+                    <strong style="color: var(--brand-green);">
+                      <i class="fas fa-route me-1"></i>Route:
+                    </strong>
+                    <span style="color: var(--text-secondary);">{{ line.route }}</span>
+                  </div>
+                  <div style="margin-bottom: 0.75rem;">
+                    <strong style="color: var(--brand-green);">
+                      <i class="fas fa-clock me-1"></i>Frequency:
+                    </strong>
+                    <span style="color: var(--text-secondary);">{{ line.frequency }}</span>
+                  </div>
+                  <div>
+                    <strong style="color: var(--brand-green);">
+                      <i class="fas fa-calendar-alt me-1"></i>Hours:
+                    </strong>
+                    <span style="color: var(--text-secondary);">{{ line.operating_hours }}</span>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bus Section -->
+      <div class="transport-section">
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="fas fa-bus me-2"></i>Bus Network - شبكة الحافلات</h3>
+          </div>
+          <div class="card-body">
+            <div style="background: linear-gradient(135deg, var(--brand-light-green), #F8F5F0); padding: 1.5rem; border-radius: 0.75rem; margin-bottom: 1.5rem;">
+              <h4 style="color: var(--brand-green); margin-bottom: 0.5rem;">
+                <i class="fas fa-info-circle me-2"></i>Bus Service
+              </h4>
+              <p style="margin: 0; color: var(--text-secondary);">
+                Comprehensive bus network connecting all major districts with air-conditioned, modern buses equipped with real-time tracking and digital payment systems.
+              </p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+              {% for bus in transportation.buses %}
+              <div class="route-card">
+                <div class="route-header">
+                  <div class="route-icon" style="background: linear-gradient(135deg, #F59E0B, #D97706);">
+                    <i class="fas fa-bus"></i>
+                  </div>
+                  <div class="route-info">
+                    <div class="route-name">{{ bus.route }}</div>
+                    <div class="route-schedule">{{ bus.path }}</div>
+                  </div>
+                </div>
+                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 2px solid var(--border); display: flex; justify-content: space-between;">
+                  <div>
+                    <strong style="color: var(--brand-green); display: block; margin-bottom: 0.25rem;">
+                      <i class="fas fa-clock me-1"></i>Frequency
+                    </strong>
+                    <span style="color: var(--text-secondary); font-size: 0.875rem;">{{ bus.frequency }}</span>
+                  </div>
+                  <div>
+                    <strong style="color: var(--brand-green); display: block; margin-bottom: 0.25rem;">
+                      <i class="fas fa-ticket-alt me-1"></i>Fare
+                    </strong>
+                    <span style="color: var(--text-secondary); font-size: 0.875rem; font-weight: 700;">{{ bus.fare }}</span>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Features Grid -->
+      <div class="stats-grid" style="margin-top: 2rem;">
+        <div class="stat-card interactive-card">
+          <div class="stat-header">
+            <div class="stat-icon">
+              <i class="fas fa-mobile-alt"></i>
+            </div>
+          </div>
+          <div class="stat-content">
+            <h3>Smart Ticketing</h3>
+            <p>Digital payment via mobile app or contactless cards</p>
+          </div>
+        </div>
+
+        <div class="stat-card interactive-card">
+          <div class="stat-header">
+            <div class="stat-icon">
+              <i class="fas fa-map-marked-alt"></i>
+            </div>
+          </div>
+          <div class="stat-content">
+            <h3>Real-Time Tracking</h3>
+            <p>Live location updates for all buses and trains</p>
+          </div>
+        </div>
+
+        <div class="stat-card interactive-card">
+          <div class="stat-header">
+            <div class="stat-icon">
+              <i class="fas fa-leaf"></i>
+            </div>
+          </div>
+          <div class="stat-content">
+            <h3>Eco-Friendly</h3>
+            <p>Electric and hybrid vehicles reducing emissions</p>
+          </div>
+        </div>
+
+        <div class="stat-card interactive-card">
+          <div class="stat-header">
+            <div class="stat-icon">
+              <i class="fas fa-wheelchair"></i>
+            </div>
+          </div>
+          <div class="stat-content">
+            <h3>Accessible</h3>
+            <p>Full accessibility for passengers with special needs</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Travel Tips -->
+      <div class="card" style="margin-top: 2rem;">
+        <div class="card-header">
+          <h3><i class="fas fa-info-circle me-2"></i>Passenger Information</h3>
+        </div>
+        <div class="card-body">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+            <div>
+              <h5 style="color: var(--brand-green); margin-bottom: 0.75rem;">
+                <i class="fas fa-credit-card me-2"></i>Payment Methods
+              </h5>
+              <ul style="list-style: none; padding: 0; margin: 0;">
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border);">
+                  <i class="fas fa-check-circle me-2" style="color: var(--brand-green);"></i>
+                  Contactless Cards
+                </li>
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border);">
+                  <i class="fas fa-check-circle me-2" style="color: var(--brand-green);"></i>
+                  Mobile App (iOS & Android)
+                </li>
+                <li style="padding: 0.5rem 0;">
+                  <i class="fas fa-check-circle me-2" style="color: var(--brand-green);"></i>
+                  Prepaid Travel Cards
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h5 style="color: var(--brand-green); margin-bottom: 0.75rem;">
+                <i class="fas fa-tags me-2"></i>Fare Information
+              </h5>
+              <ul style="list-style: none; padding: 0; margin: 0;">
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border);">
+                  <strong>Single Journey:</strong> 4-6 SAR
+                </li>
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border);">
+                  <strong>Daily Pass:</strong> 15 SAR
+                </li>
+                <li style="padding: 0.5rem 0;">
+                  <strong>Monthly Pass:</strong> 180 SAR
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h5 style="color: var(--brand-green); margin-bottom: 0.75rem;">
+                <i class="fas fa-headset me-2"></i>Customer Support
+              </h5>
+              <ul style="list-style: none; padding: 0; margin: 0;">
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border);">
+                  <i class="fas fa-phone me-2" style="color: var(--brand-green);"></i>
+                  Hotline: 19912
+                </li>
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border);">
+                  <i class="fas fa-envelope me-2" style="color: var(--brand-green);"></i>
+                  support@riyadhmetro.sa
+                </li>
+                <li style="padding: 0.5rem 0;">
+                  <i class="fas fa-clock me-2" style="color: var(--brand-green);"></i>
+                  24/7 Service
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

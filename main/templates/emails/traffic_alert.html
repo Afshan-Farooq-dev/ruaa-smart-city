@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: {{ status_color|default:"#f59e0b" }}; color: white; padding: 20px; text-align: center; border-radius: 10px 10px 0 0; }
+        .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
+        .alert-box { background: white; padding: 20px; border-left: 4px solid {{ status_color|default:"#f59e0b" }}; margin: 20px 0; border-radius: 5px; }
+        .status-badge { display: inline-block; background: {{ status_color|default:"#f59e0b" }}; color: white; padding: 5px 15px; border-radius: 20px; font-size: 14px; }
+        .button { display: inline-block; background: #667eea; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+        .route-info { margin: 15px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚦 Traffic Alert</h1>
+        </div>
+        <div class="content">
+            <h2>{{ route_name }}</h2>
+            <p><span class="status-badge">{{ status }}</span></p>
+            
+            <div class="alert-box">
+                <h3>Current Status</h3>
+                <div class="route-info">
+                    <strong>City:</strong> {{ city }}<br>
+                    <strong>Area:</strong> {{ area }}<br>
+                    <strong>Condition:</strong> {{ status }}<br>
+                    <strong>Last Updated:</strong> {{ timestamp|default:"Just now" }}
+                </div>
+                
+                {% if description %}
+                <p>{{ description }}</p>
+                {% endif %}
+                
+                {% if recommendation %}
+                <p><strong>💡 Recommendation:</strong> {{ recommendation }}</p>
+                {% endif %}
+            </div>
+            
+            <center>
+                <a href="{{ site_url }}/traffic/" class="button">View Full Traffic Map</a>
+            </center>
+            
+            <p style="color: #666; font-size: 12px; margin-top: 30px;">
+                You're receiving this because you subscribed to alerts for {{ route_name }}.<br>
+                <a href="{{ site_url }}/settings/">Manage your subscriptions</a> | <a href="{{ site_url }}/settings/">Unsubscribe</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

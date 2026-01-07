@@ -1,0 +1,519 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Tourism & Attractions — Ruaa Smart City{% endblock %}
+
+{% block content %}
+<div class="app-wrapper">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <img src="{% static 'Ruaa2.png' %}" alt="Ruaa Logo" />
+      </div>
+      <div class="sidebar-brand">
+        <h1>Ruaa</h1>
+        <p>Smart City</p>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <a href="{% url 'dashboard' %}" class="nav-link">
+          <i class="fas fa-home"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="{% url 'traffic' %}" class="nav-link">
+          <i class="fas fa-car"></i>
+          <span>Traffic</span>
+        </a>
+        <a href="{% url 'weather' %}" class="nav-link">
+          <i class="fas fa-cloud-sun"></i>
+          <span>Weather</span>
+        </a>
+        <a href="{% url 'services' %}" class="nav-link">
+          <i class="fas fa-hospital"></i>
+          <span>Healthcare</span>
+        </a>
+        <a href="{% url 'tourism' %}" class="nav-link active">
+          <i class="fas fa-landmark"></i>
+          <span>Tourism</span>
+        </a>
+        <a href="{% url 'transportation' %}" class="nav-link">
+          <i class="fas fa-subway"></i>
+          <span>Transportation</span>
+        </a>
+        <a href="{% url 'map' %}" class="nav-link">
+          <i class="fas fa-map"></i>
+          <span>City Map</span>
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-profile">
+        <div class="user-avatar">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="user-info">
+          <div class="user-name">{{ user.username }}</div>
+          <div class="user-role">Citizen</div>
+        </div>
+        <form method="post" action="{% url 'logout' %}" style="margin: 0;">
+          {% csrf_token %}
+          <button type="submit" class="logout-btn" title="Logout">
+            <i class="fas fa-sign-out-alt"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <div class="page-title">
+        <h2><i class="fas fa-landmark me-2" style="color: var(--brand-green);"></i>Tourism & Attractions</h2>
+        <p>Explore Riyadh's Rich Heritage and Modern Wonders</p>
+        <div class="vision-badge" style="margin-top: 0.5rem;">
+          <i class="fas fa-flag"></i>
+          Saudi Vision 2030 - Transforming Tourism
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content-area">
+      <!-- Vision 2030 Section -->
+      <div class="vision-section">
+        <h2><i class="fas fa-globe-asia me-2"></i>Riyadh: Gateway to Arabian Excellence</h2>
+        <p style="font-size: 1.125rem; color: var(--text-secondary); margin-bottom: 0;">
+          As part of Saudi Vision 2030, Riyadh is emerging as a world-class destination combining rich cultural heritage 
+          with cutting-edge modern development. Discover historical sites, museums, entertainment hubs, and architectural marvels.
+        </p>
+      </div>
+
+        <!-- Animated header extras -->
+        <div class="page-hero" style="margin-top:1rem; display:flex; align-items:center; justify-content:space-between; gap:1rem;">
+          <div style="flex:1;">
+            <h1 class="animated-fade">Discover Riyadh — Curated for You</h1>
+            <p class="animated-fade" style="animation-delay:200ms;">Interactive guides, quick facts, and local tips to plan your visit.</p>
+          </div>
+          <div style="width:360px;">
+            <div class="card" style="padding:0.75rem;">
+              <h5 style="margin:0 0 0.5rem 0;">Trip Recommendation</h5>
+              <div style="display:grid; gap:0.5rem;">
+                <select id="trip-type" class="form-control">
+                  <option value="History">History</option>
+                  <option value="Culture">Culture</option>
+                  <option value="Modern">Modern</option>
+                  <option value="Outdoor">Outdoor</option>
+                </select>
+                <select id="trip-time" class="form-control">
+                  <option value="1">1 hour</option>
+                  <option value="3">3 hours</option>
+                  <option value="4">Half-day</option>
+                </select>
+                <button id="trip-btn" class="btn btn-primary">Generate Itinerary</button>
+                <div id="trip-result" style="font-size:0.9rem; color:var(--text-secondary); margin-top:0.5rem;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      <!-- Tourism Grid -->
+      <div class="tourism-grid">
+        {% for attraction in attractions %}
+          <div id="card-{{ forloop.counter }}" class="tourism-card interactive-card" data-category="{{ attraction.category }}" data-lat="{{ attraction.lat }}" data-lng="{{ attraction.lng }}" data-name="{{ attraction.name|escape }}" data-id="{{ attraction.name|slugify }}">
+            <div style="overflow: hidden; border-radius: 1rem 1rem 0 0; height: 220px;">
+              <img src="{{ attraction.image }}" alt="{{ attraction.name }}" class="tourism-image" />
+            </div>
+          <div class="tourism-content">
+            <div class="tourism-badge">
+              <i class="fas fa-map-marker-alt me-1"></i>
+              {{ attraction.category }}
+            </div>
+            <h3 class="tourism-title">{{ attraction.name }}</h3>
+            <p class="tourism-description">{{ attraction.description }}</p>
+              <!-- Quick facts and reactions -->
+              <div style="display:flex; align-items:center; gap:0.75rem; margin-top:1rem; justify-content:space-between;">
+                <div style="display:flex; gap:0.5rem; align-items:center;">
+                  <button class="fact-btn badge badge-warning" title="Top pick">⭐</button>
+                  <button class="fact-btn badge badge-danger" title="Local favorite">❤️</button>
+                </div>
+                <div class="reactions" style="display:flex; gap:0.5rem;">
+                  <button class="react-btn btn btn-light" data-reaction="heart">❤️ <span class="count">0</span></button>
+                  <button class="react-btn btn btn-light" data-reaction="star">⭐ <span class="count">0</span></button>
+                </div>
+              </div>
+              
+              <!-- Action Buttons -->
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 1rem;">
+                <button class="btn btn-outline-primary btn-sm view-details-btn" data-bs-toggle="modal" data-bs-target="#attraction-modal" onclick="showAttractionDetails('{{ attraction.name|escapejs }}', {{ forloop.counter }})">
+                  <i class="fas fa-info-circle me-1"></i>View Details
+                </button>
+                <button class="btn btn-outline-success btn-sm" onclick="getDirections({{ attraction.lat }}, {{ attraction.lng }}, '{{ attraction.name|escapejs }}')">
+                  <i class="fas fa-directions me-1"></i>Get Directions
+                </button>
+              </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Interactive Leaflet Map Section -->
+      <div class="card" style="margin-top: 2rem; padding: 0; overflow: hidden;">
+        <div style="padding: 1.5rem; background: linear-gradient(135deg, #2D7A40 0%, #1a4d28 100%); color: white;">
+          <h3 style="margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fas fa-map-marked-alt"></i>
+            Interactive Attractions Map
+          </h3>
+          <p style="margin: 0.5rem 0 0 0; opacity: 0.9;">Click on markers to explore attractions</p>
+        </div>
+        <div id="attractions-map" style="height: 600px; width: 100%;"></div>
+      </div>
+
+        <!-- Attraction details modal (injected/controlled by JS) -->
+        <div id="attraction-modal" class="modal fade" tabindex="-1" aria-hidden="true" aria-labelledby="modalTitle" role="dialog">
+          <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 id="modalTitle" class="modal-title">Attraction</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem; align-items:start;">
+                  <!-- Left column: Gallery & Virtual Tour -->
+                  <div>
+                    <div style="position:relative;">
+                      <img id="modal-image" src="" alt="" style="width:100%; border-radius:0.5rem; object-fit:cover; height:320px;" />
+                      <button id="modal-prev" class="btn btn-sm btn-light" style="position:absolute; left:8px; top:50%; transform:translateY(-50%);" aria-label="Previous image" tabindex="0">◀</button>
+                      <button id="modal-next" class="btn btn-sm btn-light" style="position:absolute; right:8px; top:50%; transform:translateY(-50%);" aria-label="Next image" tabindex="0">▶</button>
+                      <button id="favorite-btn" class="btn btn-sm btn-outline-danger" style="position:absolute; top:12px; right:12px;" aria-label="Toggle favorite" tabindex="0">
+                        <i class="fas fa-heart"></i>
+                      </button>
+                    </div>
+                    
+                    <!-- Virtual Tour Button -->
+                    <div id="virtual-tour-section" style="margin-top:0.75rem; display:none;">
+                      <button id="virtual-tour-btn" class="btn btn-success w-100" tabindex="0">
+                        <i class="fas fa-street-view me-2"></i>Launch Virtual 360° Tour
+                      </button>
+                      <iframe id="virtual-tour-frame" style="width:100%; height:320px; border:none; border-radius:0.5rem; margin-top:0.75rem; display:none;" allowfullscreen></iframe>
+                    </div>
+                    
+                    <div id="modal-video" style="margin-top:0.5rem; display:none;">
+                      <video id="modal-video-el" controls style="width:100%; border-radius:6px;">
+                        <source id="modal-video-src" src="" type="video/mp4">
+                        Your browser does not support the video tag.
+                      </video>
+                    </div>
+                    
+                    <!-- Weather Widget -->
+                    <div id="weather-widget" class="card" style="margin-top:1rem; padding:1rem;">
+                      <div style="display:flex; align-items:center; justify-content:space-between;">
+                        <div>
+                          <h6 style="margin:0;"><i class="fas fa-cloud-sun me-2"></i>Current Weather</h6>
+                          <div id="weather-temp" style="font-size:2rem; font-weight:700; color:var(--brand-green); margin:0.25rem 0;">--°C</div>
+                          <div id="weather-condition" style="color:var(--text-secondary);">Loading...</div>
+                        </div>
+                        <div style="text-align:right;">
+                          <div id="weather-icon" style="font-size:3rem;">☀️</div>
+                        </div>
+                      </div>
+                      <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid #eee;">
+                        <p style="margin:0; font-size:0.9rem;"><strong>Best Visit Time:</strong> <span id="best-time">Morning</span></p>
+                        <p style="margin:0.25rem 0 0 0; font-size:0.9rem;"><strong>Crowd Level:</strong> <span id="crowd-level">Moderate</span></p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Right column: Details & Reviews -->
+                  <div>
+                    <div style="display:flex; align-items:start; justify-content:space-between; gap:1rem;">
+                      <div style="flex:1;">
+                        <h3 id="modal-name"></h3>
+                        <p id="modal-category" style="font-weight:700; color:var(--brand-green);"></p>
+                      </div>
+                      <div style="text-align:center;">
+                        <div id="avg-rating" style="font-size:2rem; font-weight:700; color:#f59e0b;">4.5</div>
+                        <div id="rating-stars" style="color:#f59e0b; font-size:1.25rem;">★★★★★</div>
+                        <div id="rating-count" style="font-size:0.85rem; color:var(--text-secondary);">0 reviews</div>
+                      </div>
+                    </div>
+                    
+                    <p id="modal-desc" style="margin-top:1rem;"></p>
+                    
+                    <div style="margin-top:1rem; display:grid; gap:0.5rem;">
+                      <p><strong>📍 Location:</strong> <span id="modal-location"></span></p>
+                      <p><strong>🕐 Hours:</strong> <span id="modal-hours">Check official site</span></p>
+                      <p><strong>🎫 Ticket:</strong> <span id="modal-price">Varies / N/A</span></p>
+                      <p><strong>💡 Tips:</strong> <span id="modal-tips">Wear comfortable shoes; respect local customs.</span></p>
+                    </div>
+                    
+                    <!-- Get Directions Button -->
+                    <button id="directions-btn" class="btn btn-outline-primary w-100" style="margin-top:1rem;" tabindex="0" onclick="openModalDirections()">
+                      <i class="fas fa-map-marked-alt me-2"></i>Get Directions
+                    </button>
+                    
+                    <!-- Reviews Section -->
+                    <div style="margin-top:1.5rem; padding-top:1.5rem; border-top:2px solid #eee;">
+                      <h5><i class="fas fa-comments me-2"></i>Reviews</h5>
+                      
+                      <!-- Submit Review Form -->
+                      <div class="card" style="padding:1rem; margin:1rem 0; background:#f9fafb;">
+                        <h6>Write a Review</h6>
+                        <div style="margin:0.5rem 0;">
+                          <label>Rating:</label>
+                          <div id="review-stars" style="font-size:1.5rem; cursor:pointer; user-select:none;" role="radiogroup" aria-label="Rating">
+                            <span class="star" data-rating="1" role="radio" aria-checked="false" tabindex="0">☆</span>
+                            <span class="star" data-rating="2" role="radio" aria-checked="false" tabindex="0">☆</span>
+                            <span class="star" data-rating="3" role="radio" aria-checked="false" tabindex="0">☆</span>
+                            <span class="star" data-rating="4" role="radio" aria-checked="false" tabindex="0">☆</span>
+                            <span class="star" data-rating="5" role="radio" aria-checked="false" tabindex="0">☆</span>
+                          </div>
+                        </div>
+                        <textarea id="review-text" class="form-control" rows="3" placeholder="Share your experience..." aria-label="Review text"></textarea>
+                        <button id="submit-review-btn" class="btn btn-primary" style="margin-top:0.5rem;" tabindex="0">Submit Review</button>
+                      </div>
+                      
+                      <!-- Recent Reviews List -->
+                      <div id="reviews-list" style="max-height:300px; overflow-y:auto;"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" tabindex="0">Close</button>
+                <a id="modal-more" class="btn btn-primary" href="#" tabindex="0" onclick="openModalMap(); return false;">View on Map</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Leaflet Map Modal for Directions (Feature 14) -->
+        <div id="directions-modal" class="modal fade" tabindex="-1" aria-hidden="true" aria-labelledby="directionsTitle" role="dialog">
+          <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 id="directionsTitle" class="modal-title"><i class="fas fa-map-marked-alt me-2"></i>Directions & Transportation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div id="leaflet-map" style="height:500px; border-radius:0.5rem;"></div>
+                <div id="transit-info" class="card" style="margin-top:1rem; padding:1rem;">
+                  <h6><i class="fas fa-subway me-2"></i>Nearby Transit</h6>
+                  <div id="transit-list"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI Recommendations Section -->
+        <div class="card" style="margin-top:2rem; padding:1.5rem; background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); color:white;">
+          <h4 style="margin:0 0 1rem 0;"><i class="fas fa-robot me-2"></i>Personalized For You</h4>
+          <p style="margin:0 0 1rem 0; opacity:0.9;">Based on your interests and visit history</p>
+          <button id="get-recommendations-btn" class="btn btn-light" tabindex="0">
+            <i class="fas fa-magic me-2"></i>Get AI Recommendations
+          </button>
+          <div id="recommendations-result" style="margin-top:1rem; display:none;">
+            <div id="recommendations-grid" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:1rem; margin-top:1rem;"></div>
+          </div>
+        </div>
+        
+        <!-- Accessibility Toggle -->
+        <div style="position:fixed; bottom:20px; right:20px; z-index:1000;">
+          <button id="accessibility-toggle" class="btn btn-dark btn-lg" style="border-radius:50%; width:60px; height:60px;" aria-label="Toggle high contrast mode" title="Toggle High Contrast" tabindex="0">
+            <i class="fas fa-adjust"></i>
+          </button>
+        </div>
+
+        <!-- Export attraction data for client-side (gallery, tips, hours) -->
+        <script>
+          window.ATTRACTIONS = {};
+          window.REVIEWS_DATA = {{ reviews_data|safe }};
+          {% for a in attractions %}
+          window.ATTRACTIONS["{{ a.name|escapejs }}"] = {
+            gallery: [{% for img in a.gallery %}"{{ img|escapejs }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
+            video: "{{ a.video|default:''|escapejs }}",
+            hours: "{{ a.hours|default:''|escapejs }}",
+            price: "{{ a.price|default:''|escapejs }}",
+            tips: "{{ a.tips|default:''|escapejs }}",
+            facts: [{% for f in a.facts %}"{{ f|escapejs }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
+            virtual_tour: "{{ a.virtual_tour|default:''|escapejs }}",
+            rating: {{ a.rating|default:0 }},
+            reviews_count: {{ a.reviews_count|default:0 }},
+            lat: {{ a.lat|default:24.7136 }},
+            lng: {{ a.lng|default:46.6753 }}
+          };
+          {% endfor %}
+        </script>
+
+      <!-- Tourism Info Cards -->
+      <div class="stats-grid" style="margin-top: 2rem;">
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-icon">
+              <i class="fas fa-users"></i>
+            </div>
+          </div>
+          <div class="stat-content">
+            <h3>Cultural Experience</h3>
+            <p>Immerse yourself in authentic Saudi culture and hospitality</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-icon">
+              <i class="fas fa-camera"></i>
+            </div>
+          </div>
+          <div class="stat-content">
+            <h3>Photo Opportunities</h3>
+            <p>Capture stunning architecture and breathtaking landscapes</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-icon">
+              <i class="fas fa-utensils"></i>
+            </div>
+          </div>
+          <div class="stat-content">
+            <h3>Traditional Cuisine</h3>
+            <p>Savor authentic Saudi dishes and international flavors</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-icon">
+              <i class="fas fa-shopping-bag"></i>
+            </div>
+          </div>
+          <div class="stat-content">
+            <h3>Shopping Districts</h3>
+            <p>From traditional souks to modern luxury malls</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tourism Tips -->
+      <div class="card" style="margin-top: 2rem;">
+        <div class="card-header">
+          <h3><i class="fas fa-lightbulb me-2"></i>Visitor Tips</h3>
+        </div>
+        <div class="card-body">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+            <div>
+              <h5 style="color: var(--brand-green); margin-bottom: 0.5rem;">
+                <i class="fas fa-clock me-2"></i>Best Time to Visit
+              </h5>
+              <p style="margin: 0;">October to March offers pleasant weather perfect for outdoor exploration.</p>
+            </div>
+            <div>
+              <h5 style="color: var(--brand-green); margin-bottom: 0.5rem;">
+                <i class="fas fa-tshirt me-2"></i>Dress Code
+              </h5>
+              <p style="margin: 0;">Modest clothing is recommended. Comfortable shoes for walking tours.</p>
+            </div>
+            <div>
+              <h5 style="color: var(--brand-green); margin-bottom: 0.5rem;">
+                <i class="fas fa-language me-2"></i>Language
+              </h5>
+              <p style="margin: 0;">Arabic is primary, English widely spoken in tourist areas.</p>
+            </div>
+            <div>
+              <h5 style="color: var(--brand-green); margin-bottom: 0.5rem;">
+                <i class="fas fa-credit-card me-2"></i>Currency
+              </h5>
+              <p style="margin: 0;">Saudi Riyal (SAR). Cards widely accepted, ATMs readily available.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Store current attraction data for modal
+let currentAttractionData = { lat: null, lng: null, name: '' };
+
+// Function to show attraction details in modal
+function showAttractionDetails(name, cardIndex) {
+  const card = document.getElementById('card-' + cardIndex);
+  if (card) {
+    currentAttractionData.lat = parseFloat(card.dataset.lat);
+    currentAttractionData.lng = parseFloat(card.dataset.lng);
+    currentAttractionData.name = name;
+    
+    // Update modal "View on Map" button
+    const modalMapBtn = document.getElementById('modal-more');
+    if (modalMapBtn) {
+      modalMapBtn.onclick = function(e) {
+        e.preventDefault();
+        openGoogleMaps(currentAttractionData.lat, currentAttractionData.lng, currentAttractionData.name);
+      };
+    }
+    
+    // Update modal "Get Directions" button
+    const directionsBtn = document.getElementById('directions-btn');
+    if (directionsBtn) {
+      directionsBtn.onclick = function(e) {
+        e.preventDefault();
+        getDirections(currentAttractionData.lat, currentAttractionData.lng, currentAttractionData.name);
+      };
+    }
+  }
+}
+
+// Function to open Google Maps with location marker
+function openGoogleMaps(lat, lng, name) {
+  const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}&query_place_id=${encodeURIComponent(name)}`;
+  window.open(googleMapsUrl, '_blank');
+}
+
+// Function to open Google Maps directions
+function getDirections(lat, lng, name) {
+  const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&destination_place_id=${encodeURIComponent(name)}`;
+  window.open(googleMapsUrl, '_blank');
+}
+
+// Function to open map from modal
+function openModalMap() {
+  if (currentAttractionData.lat && currentAttractionData.lng) {
+    openGoogleMaps(currentAttractionData.lat, currentAttractionData.lng, currentAttractionData.name);
+  }
+}
+
+// Function to open directions from modal
+function openModalDirections() {
+  if (currentAttractionData.lat && currentAttractionData.lng) {
+    getDirections(currentAttractionData.lat, currentAttractionData.lng, currentAttractionData.name);
+  }
+}
+
+// Store attraction data when card is clicked
+document.addEventListener('DOMContentLoaded', function() {
+  const cards = document.querySelectorAll('.tourism-card');
+  cards.forEach(card => {
+    card.addEventListener('click', function() {
+      currentAttractionData = {
+        lat: parseFloat(this.dataset.lat),
+        lng: parseFloat(this.dataset.lng),
+        name: this.dataset.name
+      };
+    });
+  });
+});
+</script>
+
+<!-- Load map enhancements script -->
+<script src="{% static 'js/map-enhancements.js' %}"></script>
+
+{% endblock %}

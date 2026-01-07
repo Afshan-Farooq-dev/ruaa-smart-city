@@ -1,0 +1,270 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Weather — Ruaa Smart City{% endblock %}
+
+{% block content %}
+<div class="app-wrapper">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <img src="{% static 'Ruaa2.png' %}" alt="Ruaa Logo" />
+      </div>
+      <div class="sidebar-brand">
+        <h1>Ruaa</h1>
+        <p>Smart City</p>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <a href="{% url 'dashboard' %}" class="nav-link">
+          <i class="fas fa-home"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="{% url 'traffic' %}" class="nav-link">
+          <i class="fas fa-car"></i>
+          <span>Traffic</span>
+        </a>
+        <a href="{% url 'weather' %}" class="nav-link active">
+          <i class="fas fa-cloud-sun"></i>
+          <span>Weather</span>
+        </a>
+        <a href="{% url 'services' %}" class="nav-link">
+          <i class="fas fa-hospital"></i>
+          <span>Healthcare</span>
+        </a>
+        <a href="{% url 'tourism' %}" class="nav-link">
+          <i class="fas fa-landmark"></i>
+          <span>Tourism</span>
+        </a>
+        <a href="{% url 'transportation' %}" class="nav-link">
+          <i class="fas fa-subway"></i>
+          <span>Transportation</span>
+        </a>
+        <a href="{% url 'map' %}" class="nav-link">
+          <i class="fas fa-map"></i>
+          <span>City Map</span>
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-profile">
+        <div class="user-avatar">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="user-info">
+          <div class="user-name">{{ user.username }}</div>
+          <div class="user-role">Citizen</div>
+        </div>
+        <form method="post" action="{% url 'logout' %}" style="margin: 0;">
+          {% csrf_token %}
+          <button type="submit" class="logout-btn" title="Logout">
+            <i class="fas fa-sign-out-alt"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <div class="page-title">
+        <h2>Weather Forecast</h2>
+        <p>Current conditions and 3-day forecast</p>
+      </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content-area" style="background: linear-gradient(135deg, #AA2D7AB 0%, #8B2560 100%); padding: 2rem; border-radius: 16px;">
+      <!-- Current Weather Hero -->
+      <div class="weather-hero" style="background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%); border-radius: 20px; padding: 2.5rem; box-shadow: 0 12px 48px rgba(0,0,0,0.15); margin-bottom: 2rem; position: relative; overflow: hidden;">
+        <!-- Animated background elements -->
+        <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: linear-gradient(135deg, #AA2D7AB 0%, #8B2560 100%); opacity: 0.1; border-radius: 50%; animation: float 6s ease-in-out infinite;"></div>
+        <div style="position: absolute; bottom: -30px; left: -30px; width: 150px; height: 150px; background: linear-gradient(135deg, #2D7A40 0%, #1a4d28 100%); opacity: 0.08; border-radius: 50%; animation: float 8s ease-in-out infinite reverse;"></div>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 2;">
+          <div class="weather-main">
+            <div class="weather-temp" style="font-size: 4.5rem; font-weight: 800; color: #1B1B1B; margin-bottom: 0.5rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); animation: scaleIn 0.8s ease-out;">
+              {{ weather.temperature }}°C
+            </div>
+            <div class="weather-condition" style="font-size: 1.75rem; font-weight: 600; color: #AA2D7AB; margin-bottom: 0.5rem; animation: slideInLeft 0.6s ease-out;">
+              {{ weather.condition }}
+            </div>
+            <div class="weather-location" style="font-size: 1.1rem; color: #6B7280; display: flex; align-items: center; gap: 0.5rem; animation: fadeIn 0.8s ease-out 0.2s backwards;">
+              <i class="fas fa-map-marker-alt" style="color: #AA2D7AB;"></i>
+              Riyadh, Saudi Arabia
+            </div>
+            <div style="margin-top: 1rem; display: flex; gap: 1rem; flex-wrap: wrap; animation: slideUp 0.6s ease-out 0.3s backwards;">
+              <div style="background: linear-gradient(135deg, #AA2D7AB 0%, #8B2560 100%); color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; font-weight: 600;">
+                <i class="fas fa-sun me-1"></i> UV Index: High
+              </div>
+              <div style="background: linear-gradient(135deg, #2D7A40 0%, #1a4d28 100%); color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; font-weight: 600;">
+                <i class="fas fa-eye me-1"></i> Visibility: Excellent
+              </div>
+            </div>
+          </div>
+          <div class="weather-icon" style="font-size: 8rem; color: #AA2D7AB; text-shadow: 0 8px 32px rgba(170, 45, 122, 0.3); animation: rotateIn 1s ease-out;">
+            <i class="fas fa-sun"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Weather Stats Grid -->
+      <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+        <div class="stat-card animate-bounceIn animate-delay-1" style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 8px 24px rgba(0,0,0,0.1); transition: all 0.3s ease;">
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <div class="stat-icon" style="width: 60px; height: 60px; background: linear-gradient(135deg, #AA2D7AB 0%, #8B2560 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; box-shadow: 0 4px 12px rgba(170, 45, 122, 0.3);">
+              <i class="fas fa-tint"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-label" style="font-size: 0.9rem; color: #6B7280; margin-bottom: 0.25rem;">Humidity</div>
+              <div class="stat-value" style="font-size: 2rem; font-weight: 700; color: #1B1B1B;">{{ weather.humidity }}%</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="stat-card animate-bounceIn animate-delay-2" style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 8px 24px rgba(0,0,0,0.1); transition: all 0.3s ease;">
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <div class="stat-icon" style="width: 60px; height: 60px; background: linear-gradient(135deg, #2D7A40 0%, #1a4d28 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; box-shadow: 0 4px 12px rgba(45, 122, 64, 0.3);">
+              <i class="fas fa-wind"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-label" style="font-size: 0.9rem; color: #6B7280; margin-bottom: 0.25rem;">Wind Speed</div>
+              <div class="stat-value" style="font-size: 2rem; font-weight: 700; color: #1B1B1B;">{{ weather.wind }} <span style="font-size: 1rem;">km/h</span></div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="stat-card animate-bounceIn animate-delay-3" style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 8px 24px rgba(0,0,0,0.1); transition: all 0.3s ease;">
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <div class="stat-icon" style="width: 60px; height: 60px; background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);">
+              <i class="fas fa-cloud"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-label" style="font-size: 0.9rem; color: #6B7280; margin-bottom: 0.25rem;">Condition</div>
+              <div class="stat-value" style="font-size: 1.25rem; font-weight: 700; color: #1B1B1B;">{{ weather.condition }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card animate-bounceIn animate-delay-4" style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 8px 24px rgba(0,0,0,0.1); transition: all 0.3s ease;">
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <div class="stat-icon" style="width: 60px; height: 60px; background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);">
+              <i class="fas fa-temperature-high"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-label" style="font-size: 0.9rem; color: #6B7280; margin-bottom: 0.25rem;">Feels Like</div>
+              <div class="stat-value" style="font-size: 2rem; font-weight: 700; color: #1B1B1B;">{{ weather.temperature|add:2 }}°C</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hourly Forecast -->
+      <div class="card animate-slideUp" style="background: white; border-radius: 20px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 8px 24px rgba(0,0,0,0.1);">
+        <div class="section-header" style="margin-bottom: 1.5rem;">
+          <h3 style="display: flex; align-items: center; gap: 0.75rem; color: #1B1B1B; font-size: 1.5rem; font-weight: 700;">
+            <i class="fas fa-clock" style="color: #AA2D7AB;"></i>
+            Hourly Forecast
+          </h3>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 1rem; overflow-x: auto;">
+          {% for hour in "12345678"|make_list %}
+          <div style="text-align: center; padding: 1rem; background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%); border-radius: 12px; transition: all 0.3s ease;" class="hourly-card">
+            <div style="font-size: 0.9rem; color: #6B7280; margin-bottom: 0.5rem; font-weight: 600;">{{ forloop.counter0|add:1 }}:00</div>
+            <div style="font-size: 2rem; color: #AA2D7AB; margin: 0.5rem 0;">
+              <i class="fas fa-sun"></i>
+            </div>
+            <div style="font-size: 1.25rem; font-weight: 700; color: #1B1B1B;">{{ weather.temperature|add:forloop.counter0 }}°</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- 3-Day Forecast -->
+      <div class="section-header mb-3 animate-slideInLeft">
+        <h3 style="display: flex; align-items: center; gap: 0.75rem; color: white; font-size: 1.75rem; font-weight: 700; text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">
+          <i class="fas fa-calendar-alt"></i>
+          3-Day Forecast
+        </h3>
+      </div>
+      <div class="forecast-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+        {% for day in weather.forecast|slice:":3" %}
+        <div class="forecast-card animate-scaleIn animate-delay-{{ forloop.counter }}" style="background: white; border-radius: 20px; padding: 2rem; box-shadow: 0 8px 24px rgba(0,0,0,0.1); text-align: center; transition: all 0.4s ease; position: relative; overflow: hidden;">
+          <div style="position: absolute; top: 0; right: 0; width: 80px; height: 80px; background: linear-gradient(135deg, #AA2D7AB 0%, #8B2560 100%); opacity: 0.1; border-radius: 0 20px 0 100%;"></div>
+          <div class="forecast-day" style="font-size: 1.25rem; font-weight: 700; color: #1B1B1B; margin-bottom: 1rem; position: relative; z-index: 2;">{{ day.day }}</div>
+          <div class="forecast-icon" style="font-size: 4rem; color: #AA2D7AB; margin: 1rem 0; position: relative; z-index: 2;">
+            <i class="fas fa-{% if day.condition == 'Sunny' %}sun{% elif 'Cloud' in day.condition %}cloud-sun{% else %}cloud{% endif %}"></i>
+          </div>
+          <div class="forecast-temp" style="font-size: 2.5rem; font-weight: 800; color: #1B1B1B; margin: 0.5rem 0; position: relative; z-index: 2;">{{ day.temp }}°C</div>
+          <div class="forecast-condition" style="font-size: 1rem; color: #6B7280; font-weight: 600; padding: 0.5rem 1rem; background: #F3F4F6; border-radius: 20px; display: inline-block; position: relative; z-index: 2;">{{ day.condition }}</div>
+          <div style="margin-top: 1rem; display: flex; justify-content: space-around; padding-top: 1rem; border-top: 2px solid #F3F4F6; position: relative; z-index: 2;">
+            <div>
+              <div style="font-size: 0.8rem; color: #6B7280;">High</div>
+              <div style="font-size: 1.1rem; font-weight: 700; color: #EF4444;">{{ day.temp|add:3 }}°</div>
+            </div>
+            <div>
+              <div style="font-size: 0.8rem; color: #6B7280;">Low</div>
+              <div style="font-size: 1.1rem; font-weight: 700; color: #3B82F6;">{{ day.temp|add:-5 }}°</div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Weather Alerts & Tips Row -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+        <!-- Weather Alert -->
+        <div class="card animate-slideInLeft" style="background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border-radius: 20px; padding: 1.5rem; box-shadow: 0 8px 24px rgba(0,0,0,0.1); border-left: 6px solid #F59E0B;">
+          <div class="card-header" style="border: none; background: none; padding: 0; margin-bottom: 1rem;">
+            <h3 style="display: flex; align-items: center; gap: 0.5rem; color: #92400E; font-size: 1.25rem; font-weight: 700;">
+              <i class="fas fa-exclamation-triangle"></i>
+              Weather Alert
+            </h3>
+          </div>
+          <div class="card-body" style="padding: 0;">
+            <div style="background: white; padding: 1rem; border-radius: 12px; margin-bottom: 0.75rem;">
+              <div style="display: flex; align-items: center; gap: 0.5rem; color: #D97706; font-weight: 600; margin-bottom: 0.5rem;">
+                <i class="fas fa-sun"></i>
+                <span>High UV Index Expected</span>
+              </div>
+              <p style="color: #78350F; font-size: 0.9rem; margin: 0;">UV index will reach 10+ today. Wear sunscreen and protective clothing.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Weather Tips -->
+        <div class="card animate-slideInRight" style="background: white; border-radius: 20px; padding: 1.5rem; box-shadow: 0 8px 24px rgba(0,0,0,0.1);">
+          <div class="card-header" style="border: none; background: none; padding: 0; margin-bottom: 1rem;">
+            <h3 style="display: flex; align-items: center; gap: 0.5rem; color: #1B1B1B; font-size: 1.25rem; font-weight: 700;">
+              <i class="fas fa-lightbulb" style="color: #AA2D7AB;"></i>
+              Weather Tips
+            </h3>
+          </div>
+          <div class="card-body" style="padding: 0;">
+            <ul class="tips-list" style="list-style: none; padding: 0; margin: 0;">
+              <li style="padding: 0.75rem; background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%); border-radius: 10px; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.75rem; transition: all 0.3s ease;">
+                <i class="fas fa-check-circle" style="color: #2D7A40; font-size: 1.25rem;"></i>
+                <span style="color: #374151;">Perfect weather for outdoor activities</span>
+              </li>
+              <li style="padding: 0.75rem; background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%); border-radius: 10px; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.75rem; transition: all 0.3s ease;">
+                <i class="fas fa-check-circle" style="color: #2D7A40; font-size: 1.25rem;"></i>
+                <span style="color: #374151;">Don't forget sunscreen - UV index is high</span>
+              </li>
+              <li style="padding: 0.75rem; background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%); border-radius: 10px; display: flex; align-items: center; gap: 0.75rem; transition: all 0.3s ease;">
+                <i class="fas fa-check-circle" style="color: #2D7A40; font-size: 1.25rem;"></i>
+                <span style="color: #374151;">Stay hydrated throughout the day</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

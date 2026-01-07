@@ -1,0 +1,485 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Healthcare Services — Ruaa Smart City{% endblock %}
+
+{% block content %}
+<div class="app-wrapper">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <img src="{% static 'Ruaa2.png' %}" alt="Ruaa Logo" />
+      </div>
+      <div class="sidebar-brand">
+        <h1>Ruaa</h1>
+        <p>Smart City</p>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <a href="{% url 'dashboard' %}" class="nav-link">
+          <i class="fas fa-home"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="{% url 'traffic' %}" class="nav-link">
+          <i class="fas fa-car"></i>
+          <span>Traffic</span>
+        </a>
+        <a href="{% url 'weather' %}" class="nav-link">
+          <i class="fas fa-cloud-sun"></i>
+          <span>Weather</span>
+        </a>
+        <a href="{% url 'services' %}" class="nav-link active">
+          <i class="fas fa-hospital"></i>
+          <span>Healthcare</span>
+        </a>
+        <a href="{% url 'tourism' %}" class="nav-link">
+          <i class="fas fa-landmark"></i>
+          <span>Tourism</span>
+        </a>
+        <a href="{% url 'transportation' %}" class="nav-link">
+          <i class="fas fa-subway"></i>
+          <span>Transportation</span>
+        </a>
+        <a href="{% url 'map' %}" class="nav-link">
+          <i class="fas fa-map"></i>
+          <span>City Map</span>
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-profile">
+        <div class="user-avatar">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="user-info">
+          <div class="user-name">{{ user.username }}</div>
+          <div class="user-role">Citizen</div>
+        </div>
+        <form method="post" action="{% url 'logout' %}" style="margin: 0;">
+          {% csrf_token %}
+          <button type="submit" class="logout-btn" title="Logout">
+            <i class="fas fa-sign-out-alt"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <div class="page-title">
+        <h2><i class="fas fa-hospital me-2" style="color: var(--brand-green);"></i>Healthcare Services</h2>
+        <p>24/7 Medical Facilities and Emergency Contacts • Click hospital for route</p>
+      </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content-area" style="animation: fadeIn 0.8s ease-out;">
+      <!-- Hospitals Section -->
+      <div class="card animate-slideUp" style="margin-bottom: 2rem; box-shadow: 0 12px 48px rgba(45, 122, 64, 0.15); border: 3px solid var(--brand-green); border-radius: 20px; overflow: hidden;">
+        <div class="card-header" style="background: linear-gradient(135deg, #1F5A30 0%, #16472a 100%); color: white; padding: 1.5rem;">
+          <h3 style="margin: 0; display: flex; align-items: center; gap: 0.75rem; font-size: 1.5rem;">
+            <i class="fas fa-hospital" style="font-size: 1.75rem; animation: float 3s ease-in-out infinite;"></i>
+            Medical Facilities
+          </h3>
+          <p style="margin: 0.5rem 0 0 0; opacity: 0.9; font-size: 0.95rem;">Click any facility for directions and details</p>
+        </div>
+        <div class="card-body" style="padding: 2rem;">
+          <div class="services-grid">
+            {% for h in services.hospitals %}
+            <div class="service-item animate-scaleIn animate-delay-{{ forloop.counter }}" data-hospital="{{ h.name }}" data-lat="{{ h.lat }}" data-lng="{{ h.lng }}" style="
+              background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+              border: 3px solid #e5e7eb;
+              border-radius: 16px;
+              padding: 1.5rem;
+              transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+              cursor: pointer;
+              position: relative;
+              overflow: hidden;
+            ">
+              <div style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: linear-gradient(135deg, #1F5A30 0%, #16472a 100%); opacity: 0.05; border-radius: 50%;"></div>
+              <div class="service-icon" style="
+                width: 70px;
+                height: 70px;
+                background: linear-gradient(135deg, #1F5A30 0%, #16472a 100%);
+                border-radius: 16px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 1rem;
+                box-shadow: 0 8px 24px rgba(31, 90, 48, 0.4);
+                transition: all 0.4s ease;
+              ">
+                <i class="fas fa-hospital" style="color: white; font-size: 2rem;"></i>
+              </div>
+              <div class="service-info" style="position: relative; z-index: 2;">
+                <div class="service-name" style="font-size: 1.25rem; font-weight: 700; color: #1B1B1B; margin-bottom: 0.75rem;">{{ h.name }}</div>
+                <div class="service-location" style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; color: #6B7280; font-size: 0.95rem;">
+                  <i class="fas fa-map-marker-alt" style="color: #1F5A30;"></i>
+                  {{ h.location }}
+                </div>
+                <div class="service-contact" style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; color: #6B7280; font-size: 0.95rem;">
+                  <i class="fas fa-phone" style="color: #1F5A30;"></i>
+                  {{ h.phone }}
+                </div>
+                <div style="margin: 0.75rem 0; padding: 0.75rem; background: linear-gradient(135deg, #F0F9F4 0%, #E8F5E9 100%); border-radius: 10px; font-size: 0.875rem; color: #1B1B1B;">
+                  <i class="fas fa-stethoscope" style="color: #1F5A30; margin-right: 0.5rem;"></i>
+                  {{ h.specialties }}
+                </div>
+                <button class="route-button" onclick="showRoute(this)" style="
+                  width: 100%;
+                  padding: 0.875rem;
+                  background: linear-gradient(135deg, #1F5A30 0%, #16472a 100%);
+                  color: white;
+                  border: none;
+                  border-radius: 12px;
+                  font-weight: 600;
+                  cursor: pointer;
+                  transition: all 0.3s ease;
+                  margin-top: 0.75rem;
+                  box-shadow: 0 4px 12px rgba(31, 90, 48, 0.4);
+                ">
+                  <i class="fas fa-route me-2"></i>
+                  Get Directions
+                </button>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Emergency Contacts Section -->
+      <div class="card animate-slideUp animate-delay-3" style="box-shadow: 0 12px 48px rgba(220, 38, 38, 0.15); border: 3px solid #DC2626; border-radius: 20px; overflow: hidden;">
+        <div class="card-header" style="background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%); color: white; padding: 1.5rem;">
+          <h3 style="margin: 0; display: flex; align-items: center; gap: 0.75rem; font-size: 1.5rem;">
+            <i class="fas fa-phone-alt" style="font-size: 1.75rem; animation: pulse 2s ease-in-out infinite;"></i>
+            Emergency Contacts
+          </h3>
+          <p style="margin: 0.5rem 0 0 0; opacity: 0.9; font-size: 0.95rem;">24/7 Emergency Hotlines - Save these numbers</p>
+        </div>
+        <div class="card-body" style="padding: 2rem;">
+          <div class="emergency-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+            {% for name, number in emergency.items %}
+            <div class="emergency-item animate-bounceIn animate-delay-{{ forloop.counter }}" style="
+              background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
+              border: 2px solid #FCA5A5;
+              border-radius: 16px;
+              padding: 1.5rem;
+              transition: all 0.3s ease;
+              cursor: pointer;
+              position: relative;
+              overflow: hidden;
+            ">
+              <div style="position: absolute; top: -30px; right: -30px; width: 100px; height: 100px; background: #DC2626; opacity: 0.08; border-radius: 50%;"></div>
+              <div class="emergency-icon" style="
+                width: 60px;
+                height: 60px;
+                background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%);
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 1rem;
+                box-shadow: 0 6px 20px rgba(220, 38, 38, 0.3);
+                position: relative;
+                z-index: 2;
+              ">
+                <i class="fas fa-phone-alt" style="color: white; font-size: 1.5rem;"></i>
+              </div>
+              <div class="emergency-info" style="position: relative; z-index: 2;">
+                <div class="emergency-label" style="font-size: 1.1rem; font-weight: 700; color: #1B1B1B; margin-bottom: 0.5rem;">{{ name }}</div>
+                <div class="emergency-number" style="font-size: 1.75rem; font-weight: 800; color: #DC2626; letter-spacing: 1px;">{{ number }}</div>
+                <button onclick="navigator.clipboard.writeText('{{ number }}')" style="
+                  margin-top: 0.75rem;
+                  padding: 0.5rem 1rem;
+                  background: white;
+                  border: 2px solid #DC2626;
+                  color: #DC2626;
+                  border-radius: 8px;
+                  font-size: 0.85rem;
+                  font-weight: 600;
+                  cursor: pointer;
+                  transition: all 0.3s ease;
+                  width: 100%;
+                ">
+                  <i class="fas fa-copy me-1"></i>Copy Number
+                </button>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Embassy Contacts Section -->
+      <div class="card animate-slideUp animate-delay-4" style="box-shadow: 0 12px 48px rgba(59, 130, 246, 0.15); border: 3px solid #3B82F6; border-radius: 20px; overflow: hidden; margin-top: 2rem;">
+        <div class="card-header" style="background: linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%); color: white; padding: 1.5rem;">
+          <h3 style="margin: 0; display: flex; align-items: center; gap: 0.75rem; font-size: 1.5rem;">
+            <i class="fas fa-flag" style="font-size: 1.75rem;"></i>
+            Embassy Numbers & Flags
+          </h3>
+          <p style="margin: 0.5rem 0 0 0; opacity: 0.9; font-size: 0.95rem;">Major Embassies in Riyadh - Contact Information</p>
+        </div>
+        <div class="card-body" style="padding: 2rem;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+            {% for embassy in embassies %}
+            <div class="embassy-item" style="
+              background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+              border: 2px solid #93C5FD;
+              border-radius: 12px;
+              padding: 1.25rem;
+              transition: all 0.3s ease;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              gap: 1rem;
+            " onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 24px rgba(59, 130, 246, 0.2)';" onmouseout="this.style.transform=''; this.style.boxShadow='';">
+              <div style="
+                width: 60px;
+                height: 60px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: white;
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                overflow: hidden;
+              ">
+                <img src="https://flagcdn.com/w80/{{ embassy.flag_code|lower }}.png" 
+                     alt="{{ embassy.country }} flag" 
+                     style="width: 100%; height: 100%; object-fit: cover;"
+                     onerror="this.style.display='none'; this.parentElement.innerHTML='{{ embassy.flag }}';">
+              </div>
+              <div style="flex: 1;">
+                <div style="font-size: 1.1rem; font-weight: 700; color: #1E40AF; margin-bottom: 0.25rem;">{{ embassy.country }}</div>
+                <div style="font-size: 0.85rem; color: #6B7280; margin-bottom: 0.5rem; direction: rtl;">{{ embassy.country_ar }}</div>
+                <a href="tel:{{ embassy.phone }}" style="
+                  font-size: 1.1rem;
+                  font-weight: 700;
+                  color: #3B82F6;
+                  text-decoration: none;
+                  display: inline-flex;
+                  align-items: center;
+                  gap: 0.5rem;
+                " onmouseover="this.style.color='#1E40AF'" onmouseout="this.style.color='#3B82F6'">
+                  <i class="fas fa-phone"></i>{{ embassy.phone }}
+                </a>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Route Modal -->
+<div id="routeModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 9999; align-items: center; justify-content: center;">
+  <div style="background: white; border-radius: 1.5rem; padding: 2rem; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+      <h3 style="margin: 0; color: var(--brand-green);">
+        <i class="fas fa-route me-2"></i>
+        Route to <span id="modalHospitalName"></span>
+      </h3>
+      <button onclick="closeModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--gray-500);">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div id="map" style="height: 300px; border-radius: 0.75rem; margin-bottom: 1.5rem; border: 2px solid var(--border);"></div>
+
+    <div style="background: var(--brand-light-green); padding: 1.5rem; border-radius: 0.75rem; margin-bottom: 1rem;">
+      <h5 style="color: var(--brand-green); margin-bottom: 1rem;">
+        <i class="fas fa-directions me-2"></i>Turn-by-Turn Directions
+      </h5>
+      <div id="routeDirections"></div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1rem;">
+      <div style="text-align: center; padding: 1rem; background: var(--gray-50); border-radius: 0.75rem;">
+        <div style="color: var(--brand-green); font-size: 1.5rem; font-weight: 700;" id="routeDistance">--</div>
+        <div style="color: var(--text-secondary); font-size: 0.875rem;">Distance</div>
+      </div>
+      <div style="text-align: center; padding: 1rem; background: var(--gray-50); border-radius: 0.75rem;">
+        <div style="color: var(--brand-green); font-size: 1.5rem; font-weight: 700;" id="routeTime">--</div>
+        <div style="color: var(--text-secondary); font-size: 0.875rem;">Est. Time</div>
+      </div>
+      <div style="text-align: center; padding: 1rem; background: var(--gray-50); border-radius: 0.75rem;">
+        <div style="color: var(--brand-green); font-size: 1.5rem; font-weight: 700;">Fast</div>
+        <div style="color: var(--text-secondary); font-size: 0.875rem;">Route Type</div>
+      </div>
+    </div>
+
+    <button onclick="startNavigation()" class="btn btn-primary w-100">
+      <i class="fas fa-navigation me-2"></i>
+      Start Navigation
+    </button>
+  </div>
+</div>
+
+<script>
+let map = null;
+let currentMarker = null;
+
+function showRoute(button) {
+  const serviceItem = button.closest('.service-item');
+  const hospitalName = serviceItem.dataset.hospital;
+  const lat = parseFloat(serviceItem.dataset.lat);
+  const lng = parseFloat(serviceItem.dataset.lng);
+  
+  // Track selected service for navigation
+  document.querySelectorAll('.service-item').forEach(item => item.classList.remove('selected'));
+  serviceItem.classList.add('selected');
+  
+  document.getElementById('modalHospitalName').textContent = hospitalName;
+  
+  const modal = document.getElementById('routeModal');
+  modal.style.display = 'flex';
+  
+  // Initialize map
+  setTimeout(() => {
+    if (!map) {
+      map = L.map('map').setView([lat, lng], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+    } else {
+      map.setView([lat, lng], 13);
+    }
+    
+    if (currentMarker) {
+      map.removeLayer(currentMarker);
+    }
+    
+    currentMarker = L.marker([lat, lng]).addTo(map)
+      .bindPopup(`<b>${hospitalName}</b>`).openPopup();
+    
+    // Simulate route calculation
+    generateRouteDirections(hospitalName);
+  }, 100);
+}
+
+function generateRouteDirections(hospitalName) {
+  // Dynamic routes based on hospital
+  const routes = {
+    'King Fahd Medical City': {
+      directions: [
+        'Head <strong>north</strong> on King Fahd Road toward Al Maathar District',
+        'Turn <strong>right</strong> onto Al Urubah Road',
+        'Continue for <strong>3.5 km</strong> past Al Tahlia Street',
+        'Turn <strong>left</strong> at King Fahd Medical City sign',
+        'Main entrance is on your <strong>right</strong> - Emergency visible'
+      ],
+      distance: '5.2 km',
+      time: '14 min'
+    },
+    'King Faisal Specialist Hospital': {
+      directions: [
+        'Head <strong>north</strong> on King Fahd Road toward Al Maathar',
+        'Turn <strong>right</strong> onto Al Urubah Road',
+        'Continue for <strong>3.2 km</strong> past Al Tahlia Street',
+        'Turn <strong>left</strong> at the hospital entrance',
+        'Destination is on your <strong>right</strong> - Oncology wing visible'
+      ],
+      distance: '5.8 km',
+      time: '15 min'
+    },
+    'Riyadh Care Hospital': {
+      directions: [
+        'Head <strong>northeast</strong> toward Olaya District',
+        'Continue on Olaya Street for <strong>2.5 km</strong>',
+        'Turn <strong>right</strong> after Kingdom Centre Tower',
+        'Hospital entrance is <strong>800m</strong> ahead on left',
+        'Parking available at main entrance'
+      ],
+      distance: '4.1 km',
+      time: '11 min'
+    },
+    'National Guard Hospital': {
+      directions: [
+        'Head <strong>east</strong> on King Abdulaziz Road',
+        'Continue straight for <strong>4.5 km</strong>',
+        'Turn <strong>right</strong> onto Prince Sultan Road',
+        'After <strong>1.2 km</strong>, turn left at the traffic light',
+        'Hospital complex will be on your <strong>left</strong>'
+      ],
+      distance: '7.2 km',
+      time: '18 min'
+    }
+  };
+  
+  // Default route if hospital not found
+  const defaultRoute = {
+    directions: [
+      'Head toward <strong>' + hospitalName + '</strong>',
+      'Follow main road for <strong>approximately 3 km</strong>',
+      'Look for hospital signs along the route',
+      'Use GPS navigation for precise directions',
+      'Destination will be clearly marked'
+    ],
+    distance: '~4.0 km',
+    time: '~12 min'
+  };
+  
+  const route = routes[hospitalName] || defaultRoute;
+  
+  const directionsHTML = route.directions.map((dir, idx) => `
+    <div style="display: flex; gap: 1rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border);">
+      <div style="background: var(--brand-green); color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">
+        ${idx + 1}
+      </div>
+      <div style="flex: 1; padding-top: 0.25rem;">
+        ${dir}
+      </div>
+    </div>
+  `).join('');
+  
+  document.getElementById('routeDirections').innerHTML = directionsHTML;
+  document.getElementById('routeDistance').textContent = route.distance;
+  document.getElementById('routeTime').textContent = route.time;
+}
+
+function closeModal() {
+  document.getElementById('routeModal').style.display = 'none';
+}
+
+function startNavigation() {
+  const hospitalName = document.getElementById('modalHospitalName').textContent;
+  const serviceItem = document.querySelector('.service-item.selected');
+  
+  if (serviceItem) {
+    const lat = parseFloat(serviceItem.dataset.lat);
+    const lng = parseFloat(serviceItem.dataset.lng);
+    
+    // Open Google Maps with destination
+    const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&destination_place_id=${encodeURIComponent(hospitalName)}`;
+    window.open(googleMapsUrl, '_blank');
+    
+    // Show success message
+    const btn = event.target.closest('button');
+    const originalHTML = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-check-circle me-2"></i>Opening Maps...';
+    btn.style.background = 'linear-gradient(135deg, #10B981, #059669)';
+    
+    setTimeout(() => {
+      closeModal();
+    }, 1500);
+  }
+}
+
+// Close modal when clicking outside
+document.getElementById('routeModal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    closeModal();
+  }
+});
+</script>
+{% endblock %}

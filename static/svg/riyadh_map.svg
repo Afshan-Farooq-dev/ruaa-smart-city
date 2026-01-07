@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid">
+  <rect width="100%" height="100%" fill="#F8F5F0"/>
+  <g id="city" transform="translate(50,30)">
+    <rect x="0" y="0" width="900" height="540" rx="20" fill="#fff" stroke="#2D7A40" stroke-width="6"/>
+    <text x="450" y="40" font-family="Inter, Arial, sans-serif" font-size="22" text-anchor="middle" fill="#374151">Simplified Riyadh Map (click dots)</text>
+    <!-- Example areas; dots will be positioned approximately -->
+    <circle class="map-dot" id="dot-Kingdom Centre Tower" data-name="Kingdom Centre Tower" data-category="Landmark" data-image="/static/kingdom_center_tower.png" data-desc="Iconic 302m skyscraper with sky bridge observatory." cx="520" cy="150" r="10" fill="#AA2D7AB" stroke="#fff" stroke-width="2" />
+    <circle class="map-dot" id="dot-Al Masmak Fortress" data-name="Al Masmak Fortress" data-category="Historical" data-image="https://images.unsplash.com/photo-1580837119756-563d608dd119?w=400" data-desc="Historic clay and mud-brick fort." cx="420" cy="260" r="10" fill="#F59E0B" stroke="#fff" stroke-width="2" />
+    <circle class="map-dot" id="dot-Diriyah Historic District" data-name="Diriyah Historic District" data-category="UNESCO Site" data-image="https://images.unsplash.com/photo-1512632578888-169bbbc64f33?w=400" data-desc="UNESCO World Heritage site." cx="180" cy="200" r="10" fill="#EF4444" stroke="#fff" stroke-width="2" />
+    <circle class="map-dot" id="dot-National Museum" data-name="National Museum" data-category="Museum" data-image="/static/nationa_museum.png" data-desc="Eight halls showcasing Saudi history." cx="450" cy="330" r="10" fill="#2D7A40" stroke="#fff" stroke-width="2" />
+    <circle class="map-dot" id="dot-Wadi Hanifah" data-name="Wadi Hanifah" data-category="Nature" data-image="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400" data-desc="Valley oasis with walking trails." cx="200" cy="380" r="10" fill="#3B82F6" stroke="#fff" stroke-width="2" />
+    <circle class="map-dot" id="dot-Boulevard Riyadh City" data-name="Boulevard Riyadh City" data-category="Entertainment" data-image="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=400" data-desc="Modern entertainment destination." cx="700" cy="360" r="10" fill="#8B5CF6" stroke="#fff" stroke-width="2" />
+  </g>
+</svg>

@@ -1,0 +1,161 @@
+=====================================================
+RUAA SMART CITY - INSTALLATION GUIDE
+=====================================================
+
+This guide will help you install and run the Ruaa Smart City project on your computer.
+
+=====================================================
+STEP 1: INSTALL PYTHON
+=====================================================
+
+1. Download Python 3.10 or higher from: https://www.python.org/downloads/
+2. During installation, make sure to check "Add Python to PATH"
+3. Click "Install Now"
+4. Verify installation by opening Command Prompt and typing:
+   python --version
+
+=====================================================
+STEP 2: EXTRACT THE PROJECT
+=====================================================
+
+1. Extract the ZIP file to a folder (example: C:\ruaa_smart_city)
+2. Remember the folder location
+
+=====================================================
+STEP 3: INSTALL DEPENDENCIES
+=====================================================
+
+1. Open Command Prompt (Press Windows + R, type "cmd", press Enter)
+2. Navigate to the project folder:
+   cd "C:\ruaa_smart_city"
+   
+3. Install required packages:
+   pip install -r requirements.txt
+
+4. Wait for installation to complete (takes 1-2 minutes)
+
+=====================================================
+STEP 4: SET UP DATABASE
+=====================================================
+
+1. In the same Command Prompt, run:
+   python manage.py migrate
+
+2. You should see "Applying migrations..." messages
+
+=====================================================
+STEP 5: CREATE ADMIN ACCOUNT (OPTIONAL)
+=====================================================
+
+1. To access admin panel, create a superuser:
+   python manage.py createsuperuser
+
+2. Enter your desired:
+   - Username
+   - Email (can skip by pressing Enter)
+   - Password (type twice)
+
+=====================================================
+STEP 6: RUN THE PROJECT
+=====================================================
+
+1. Start the server:
+   python manage.py runserver
+
+2. You should see:
+   "Starting development server at http://127.0.0.1:8000/"
+
+3. Open your web browser and go to:
+   http://127.0.0.1:8000/
+
+4. The Ruaa Smart City website should now be running!
+
+=====================================================
+STEP 7: CREATE USER ACCOUNT
+=====================================================
+
+1. On the website, click "Create Account" or go to:
+   http://127.0.0.1:8000/signup/
+
+2. Fill in:
+   - Username
+   - Email (optional)
+   - Password (enter twice)
+
+3. Click "Create Account"
+
+4. You will be automatically logged in to the dashboard
+
+=====================================================
+ACCESSING DIFFERENT PAGES
+=====================================================
+
+After logging in, you can access:
+- Dashboard (AI Chatbot): http://127.0.0.1:8000/dashboard/
+- Traffic Status: http://127.0.0.1:8000/traffic/
+- Weather Forecast: http://127.0.0.1:8000/weather/
+- Public Services: http://127.0.0.1:8000/services/
+- City Map: http://127.0.0.1:8000/map/
+- Admin Panel: http://127.0.0.1:8000/admin/ (need superuser account)
+
+=====================================================
+STOPPING THE SERVER
+=====================================================
+
+To stop the server:
+1. Go to the Command Prompt window
+2. Press Ctrl + C
+3. Type "Y" if asked to terminate
+
+=====================================================
+RUNNING AGAIN LATER
+=====================================================
+
+To run the project again after closing:
+1. Open Command Prompt
+2. Navigate to project folder:
+   cd "C:\ruaa_smart_city"
+3. Run:
+   python manage.py runserver
+4. Open browser: http://127.0.0.1:8000/
+
+=====================================================
+TROUBLESHOOTING
+=====================================================
+
+Problem: "python is not recognized"
+Solution: Reinstall Python and check "Add Python to PATH"
+
+Problem: "No module named 'django'"
+Solution: Run: pip install -r requirements.txt
+
+Problem: "Port 8000 is already in use"
+Solution: Close other Command Prompt windows or use different port:
+          python manage.py runserver 8080
+
+Problem: Page shows error
+Solution: Make sure you ran "python manage.py migrate" first
+
+=====================================================
+SYSTEM REQUIREMENTS
+=====================================================
+
+- Windows 7/8/10/11 (64-bit)
+- Python 3.10 or higher
+- 2 GB RAM minimum
+- Internet connection (for map tiles and AI features)
+
+=====================================================
+SUPPORT
+=====================================================
+
+For technical support, please contact the project administrator.
+
+Project Features:
+- AI-powered chatbot using Groq API
+- Real-time traffic monitoring
+- Weather forecasts
+- Public services directory
+- Interactive city map with Leaflet.js
+
+=====================================================

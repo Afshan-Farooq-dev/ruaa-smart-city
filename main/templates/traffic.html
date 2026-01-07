@@ -1,0 +1,522 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Traffic Status — Ruaa Smart City{% endblock %}
+
+{% block content %}
+<div class="app-wrapper">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <img src="{% static 'Ruaa2.png' %}" alt="Ruaa Logo" />
+      </div>
+      <div class="sidebar-brand">
+        <h1>Ruaa</h1>
+        <p>Smart City</p>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <a href="{% url 'dashboard' %}" class="nav-link">
+          <i class="fas fa-home"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="{% url 'traffic' %}" class="nav-link active">
+          <i class="fas fa-car"></i>
+          <span>Traffic</span>
+        </a>
+        <a href="{% url 'weather' %}" class="nav-link">
+          <i class="fas fa-cloud-sun"></i>
+          <span>Weather</span>
+        </a>
+        <a href="{% url 'services' %}" class="nav-link">
+          <i class="fas fa-hospital"></i>
+          <span>Healthcare</span>
+        </a>
+        <a href="{% url 'tourism' %}" class="nav-link">
+          <i class="fas fa-landmark"></i>
+          <span>Tourism</span>
+        </a>
+        <a href="{% url 'transportation' %}" class="nav-link">
+          <i class="fas fa-subway"></i>
+          <span>Transportation</span>
+        </a>
+        <a href="{% url 'map' %}" class="nav-link">
+          <i class="fas fa-map"></i>
+          <span>City Map</span>
+        </a>
+        <a href="{% url 'settings' %}" class="nav-link" style="border-top: 1px solid rgba(255,255,255,0.1); margin-top: 0.5rem; padding-top: 1rem;">
+          <i class="fas fa-cog"></i>
+          <span>Email Settings</span>
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-profile">
+        <div class="user-avatar">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="user-info">
+          <div class="user-name">{{ user.username }}</div>
+          <div class="user-role">Citizen</div>
+        </div>
+        <form method="post" action="{% url 'logout' %}" style="margin: 0;">
+          {% csrf_token %}
+          <button type="submit" class="logout-btn" title="Logout">
+            <i class="fas fa-sign-out-alt"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <div class="page-title">
+        <h2><i class="fas fa-road me-2"></i>Live Traffic Status</h2>
+        <p>Real-time traffic conditions across major Saudi cities</p>
+      </div>
+      <div class="legend-bar">
+        <span style="color: #28A745; font-weight: 600;"><i class="fas fa-circle" style="font-size: 0.6rem; margin-right: 0.5rem;"></i>Clear</span>
+        <span style="color: #FFC107; font-weight: 600;"><i class="fas fa-circle" style="font-size: 0.6rem; margin-right: 0.5rem;"></i>Moderate</span>
+        <span style="color: #DC3545; font-weight: 600;"><i class="fas fa-circle" style="font-size: 0.6rem; margin-right: 0.5rem;"></i>Heavy</span>
+      </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content-area">
+      
+      <!-- Riyadh Section -->
+      <div class="city-section" style="background: white; border-radius: 16px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-left: 6px solid #3B82F6;">
+        <div class="city-header" style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid #3B82F620;">
+          <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #3B82F6, #3B82F6CC); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 16px #3B82F640;">
+            <i class="fas fa-city" style="color: white; font-size: 1.8rem;"></i>
+          </div>
+          <div style="flex: 1;">
+            <h3 style="margin: 0; font-size: 1.8rem; color: #1F2937; font-weight: 700;">
+              Riyadh <span style="font-size: 1.2rem; color: #6B7280; font-weight: 400;">الرياض</span>
+            </h3>
+            <p style="margin: 0.5rem 0 0 0; font-size: 0.95rem; color: #9CA3AF;">
+              <i class="fas fa-info-circle" style="margin-right: 0.5rem;"></i>
+              <span style="color: #10B981; font-weight: 600;">Capital City</span>
+            </p>
+          </div>
+        </div>
+        <ul class="sub-area-list" style="list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem;">
+          {% for area, info in traffic_data.items %}
+            {% if info.city == "Riyadh" %}
+            <li class="sub-area-item" 
+                onclick="showTrafficDetails('{{ area }}', '{{ info.area_ar }}', '{{ info.status }}', '{{ info.description }}', '{{ info.traffic_color }}', '#3B82F6')"
+                style="padding: 1.2rem 1.5rem; background: linear-gradient(135deg, #3B82F608, transparent); border-radius: 12px; cursor: pointer; transition: all 0.3s ease; border-left: 4px solid #3B82F6; display: flex; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 1rem;">
+                <i class="fas fa-map-marker-alt" style="color: #3B82F6; font-size: 1.1rem;"></i>
+                <div>
+                  <span style="font-size: 1.05rem; font-weight: 600; color: #1F2937;">{{ area }}</span>
+                  <span style="font-size: 0.9rem; color: #6B7280; margin-left: 0.8rem; direction: rtl; display: inline-block;">{{ info.area_ar }}</span>
+                </div>
+              </div>
+              <span class="status-badge" style="padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 700; color: white; background: {{ info.traffic_color }};">
+                {{ info.status }}
+              </span>
+            </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+
+      <!-- Jeddah Section -->
+      <div class="city-section" style="background: white; border-radius: 16px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-left: 6px solid #EF4444;">
+        <div class="city-header" style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid #EF444420;">
+          <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #EF4444, #EF4444CC); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 16px #EF444440;">
+            <i class="fas fa-water" style="color: white; font-size: 1.8rem;"></i>
+          </div>
+          <div style="flex: 1;">
+            <h3 style="margin: 0; font-size: 1.8rem; color: #1F2937; font-weight: 700;">
+              Jeddah <span style="font-size: 1.2rem; color: #6B7280; font-weight: 400;">جدة</span>
+            </h3>
+            <p style="margin: 0.5rem 0 0 0; font-size: 0.95rem; color: #9CA3AF;">
+              <i class="fas fa-info-circle" style="margin-right: 0.5rem;"></i>
+              <span style="color: #10B981; font-weight: 600;">Coastal City</span>
+            </p>
+          </div>
+        </div>
+        <ul class="sub-area-list" style="list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem;">
+          {% for area, info in traffic_data.items %}
+            {% if info.city == "Jeddah" %}
+            <li class="sub-area-item" 
+                onclick="showTrafficDetails('{{ area }}', '{{ info.area_ar }}', '{{ info.status }}', '{{ info.description }}', '{{ info.traffic_color }}', '#EF4444')"
+                style="padding: 1.2rem 1.5rem; background: linear-gradient(135deg, #EF444408, transparent); border-radius: 12px; cursor: pointer; transition: all 0.3s ease; border-left: 4px solid #EF4444; display: flex; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 1rem;">
+                <i class="fas fa-map-marker-alt" style="color: #EF4444; font-size: 1.1rem;"></i>
+                <div>
+                  <span style="font-size: 1.05rem; font-weight: 600; color: #1F2937;">{{ area }}</span>
+                  <span style="font-size: 0.9rem; color: #6B7280; margin-left: 0.8rem; direction: rtl; display: inline-block;">{{ info.area_ar }}</span>
+                </div>
+              </div>
+              <span class="status-badge" style="padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 700; color: white; background: {{ info.traffic_color }};">
+                {{ info.status }}
+              </span>
+            </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+
+      <!-- Makkah Section -->
+      <div class="city-section" style="background: white; border-radius: 16px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-left: 6px solid #F59E0B;">
+        <div class="city-header" style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid #F59E0B20;">
+          <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #F59E0B, #F59E0BCC); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 16px #F59E0B40;">
+            <i class="fas fa-mosque" style="color: white; font-size: 1.8rem;"></i>
+          </div>
+          <div style="flex: 1;">
+            <h3 style="margin: 0; font-size: 1.8rem; color: #1F2937; font-weight: 700;">
+              Makkah <span style="font-size: 1.2rem; color: #6B7280; font-weight: 400;">مكة</span>
+            </h3>
+            <p style="margin: 0.5rem 0 0 0; font-size: 0.95rem; color: #9CA3AF;">
+              <i class="fas fa-info-circle" style="margin-right: 0.5rem;"></i>
+              <span style="color: #10B981; font-weight: 600;">Holy City</span>
+            </p>
+          </div>
+        </div>
+        <ul class="sub-area-list" style="list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem;">
+          {% for area, info in traffic_data.items %}
+            {% if info.city == "Makkah" %}
+            <li class="sub-area-item" 
+                onclick="showTrafficDetails('{{ area }}', '{{ info.area_ar }}', '{{ info.status }}', '{{ info.description }}', '{{ info.traffic_color }}', '#F59E0B')"
+                style="padding: 1.2rem 1.5rem; background: linear-gradient(135deg, #F59E0B08, transparent); border-radius: 12px; cursor: pointer; transition: all 0.3s ease; border-left: 4px solid #F59E0B; display: flex; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 1rem;">
+                <i class="fas fa-map-marker-alt" style="color: #F59E0B; font-size: 1.1rem;"></i>
+                <div>
+                  <span style="font-size: 1.05rem; font-weight: 600; color: #1F2937;">{{ area }}</span>
+                  <span style="font-size: 0.9rem; color: #6B7280; margin-left: 0.8rem; direction: rtl; display: inline-block;">{{ info.area_ar }}</span>
+                </div>
+              </div>
+              <span class="status-badge" style="padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 700; color: white; background: {{ info.traffic_color }};">
+                {{ info.status }}
+              </span>
+            </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+
+      <!-- Madinah Section -->
+      <div class="city-section" style="background: white; border-radius: 16px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-left: 6px solid #10B981;">
+        <div class="city-header" style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid #10B98120;">
+          <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #10B981, #10B981CC); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 16px #10B98140;">
+            <i class="fas fa-mosque" style="color: white; font-size: 1.8rem;"></i>
+          </div>
+          <div style="flex: 1;">
+            <h3 style="margin: 0; font-size: 1.8rem; color: #1F2937; font-weight: 700;">
+              Madinah <span style="font-size: 1.2rem; color: #6B7280; font-weight: 400;">المدينة</span>
+            </h3>
+            <p style="margin: 0.5rem 0 0 0; font-size: 0.95rem; color: #9CA3AF;">
+              <i class="fas fa-info-circle" style="margin-right: 0.5rem;"></i>
+              <span style="color: #10B981; font-weight: 600;">Radiant City</span>
+            </p>
+          </div>
+        </div>
+        <ul class="sub-area-list" style="list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem;">
+          {% for area, info in traffic_data.items %}
+            {% if info.city == "Madinah" %}
+            <li class="sub-area-item" 
+                onclick="showTrafficDetails('{{ area }}', '{{ info.area_ar }}', '{{ info.status }}', '{{ info.description }}', '{{ info.traffic_color }}', '#10B981')"
+                style="padding: 1.2rem 1.5rem; background: linear-gradient(135deg, #10B98108, transparent); border-radius: 12px; cursor: pointer; transition: all 0.3s ease; border-left: 4px solid #10B981; display: flex; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 1rem;">
+                <i class="fas fa-map-marker-alt" style="color: #10B981; font-size: 1.1rem;"></i>
+                <div>
+                  <span style="font-size: 1.05rem; font-weight: 600; color: #1F2937;">{{ area }}</span>
+                  <span style="font-size: 0.9rem; color: #6B7280; margin-left: 0.8rem; direction: rtl; display: inline-block;">{{ info.area_ar }}</span>
+                </div>
+              </div>
+              <span class="status-badge" style="padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 700; color: white; background: {{ info.traffic_color }};">
+                {{ info.status }}
+              </span>
+            </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+
+      <!-- Dammam Section -->
+      <div class="city-section" style="background: white; border-radius: 16px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-left: 6px solid #8B5CF6;">
+        <div class="city-header" style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid #8B5CF620;">
+          <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #8B5CF6, #8B5CF6CC); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 16px #8B5CF640;">
+            <i class="fas fa-oil-can" style="color: white; font-size: 1.8rem;"></i>
+          </div>
+          <div style="flex: 1;">
+            <h3 style="margin: 0; font-size: 1.8rem; color: #1F2937; font-weight: 700;">
+              Dammam <span style="font-size: 1.2rem; color: #6B7280; font-weight: 400;">الدمام</span>
+            </h3>
+            <p style="margin: 0.5rem 0 0 0; font-size: 0.95rem; color: #9CA3AF;">
+              <i class="fas fa-info-circle" style="margin-right: 0.5rem;"></i>
+              <span style="color: #10B981; font-weight: 600;">Eastern Province</span>
+            </p>
+          </div>
+        </div>
+        <ul class="sub-area-list" style="list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem;">
+          {% for area, info in traffic_data.items %}
+            {% if info.city == "Dammam" %}
+            <li class="sub-area-item" 
+                onclick="showTrafficDetails('{{ area }}', '{{ info.area_ar }}', '{{ info.status }}', '{{ info.description }}', '{{ info.traffic_color }}', '#8B5CF6')"
+                style="padding: 1.2rem 1.5rem; background: linear-gradient(135deg, #8B5CF608, transparent); border-radius: 12px; cursor: pointer; transition: all 0.3s ease; border-left: 4px solid #8B5CF6; display: flex; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 1rem;">
+                <i class="fas fa-map-marker-alt" style="color: #8B5CF6; font-size: 1.1rem;"></i>
+                <div>
+                  <span style="font-size: 1.05rem; font-weight: 600; color: #1F2937;">{{ area }}</span>
+                  <span style="font-size: 0.9rem; color: #6B7280; margin-left: 0.8rem; direction: rtl; display: inline-block;">{{ info.area_ar }}</span>
+                </div>
+              </div>
+              <span class="status-badge" style="padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 700; color: white; background: {{ info.traffic_color }};">
+                {{ info.status }}
+              </span>
+            </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+      
+      <!-- Details Modal (Hidden by default) -->
+      <div id="trafficDetailsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; animation: fadeIn 0.3s ease;">
+        <div id="modalContent" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9); background: white; border-radius: 20px; padding: 2.5rem; max-width: 600px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;">
+          <button onclick="closeTrafficDetails()" style="position: absolute; top: 1.5rem; right: 1.5rem; background: #F3F4F6; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s;">
+            <i class="fas fa-times" style="color: #6B7280; font-size: 1.2rem;"></i>
+          </button>
+          
+          <div id="modalBody"></div>
+        </div>
+      </div>
+
+  </div>
+</div>
+
+<script>
+// Traffic data from Django
+window.TRAFFIC_DATA = {{ traffic_data_json|safe }};
+
+// Show traffic details modal with animation
+function showTrafficDetails(areaName, areaAr, status, description, trafficColor, cityColor) {
+  var modal = document.getElementById('trafficDetailsModal');
+  var modalBody = document.getElementById('modalBody');
+  
+  // Build modal content
+  var statusIcon = '';
+  if (status === 'Clear') {
+    statusIcon = '<i class="fas fa-check-circle"></i>';
+  } else if (status === 'Moderate') {
+    statusIcon = '<i class="fas fa-exclamation-circle"></i>';
+  } else if (status === 'Heavy') {
+    statusIcon = '<i class="fas fa-times-circle"></i>';
+  }
+  
+  modalBody.innerHTML = 
+    '<div style="text-align: center; margin-bottom: 2rem;">' +
+      '<div style="width: 80px; height: 80px; background: linear-gradient(135deg, ' + cityColor + ', ' + cityColor + 'CC); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; box-shadow: 0 8px 24px ' + cityColor + '40; animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);">' +
+        '<i class="fas fa-map-marker-alt" style="color: white; font-size: 2.5rem;"></i>' +
+      '</div>' +
+      '<h3 style="margin: 0 0 0.5rem 0; font-size: 1.8rem; color: #1F2937; font-weight: 700;">' + areaName + '</h3>' +
+      '<p style="margin: 0; font-size: 1.2rem; color: #6B7280; direction: rtl;">' + areaAr + '</p>' +
+    '</div>' +
+    
+    '<div style="background: linear-gradient(135deg, ' + trafficColor + '10, transparent); border-radius: 16px; padding: 2rem; border-left: 5px solid ' + trafficColor + '; margin-bottom: 2rem; text-align: center;">' +
+      '<div style="font-size: 0.85rem; color: #6B7280; text-transform: uppercase; font-weight: 600; margin-bottom: 1rem; letter-spacing: 0.05em;">Traffic Status</div>' +
+      '<div style="display: flex; align-items: center; justify-content: center; gap: 1rem;">' +
+        '<span style="font-size: 2rem; color: ' + trafficColor + ';">' + statusIcon + '</span>' +
+        '<span style="font-size: 2rem; font-weight: 700; color: ' + trafficColor + ';">' + status + '</span>' +
+      '</div>' +
+    '</div>' +
+    
+    '<div style="background: #F9FAFB; border-radius: 12px; padding: 1.5rem; border-left: 4px solid ' + cityColor + '; margin-bottom: 1.5rem;">' +
+      '<div style="font-size: 0.85rem; color: #6B7280; text-transform: uppercase; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">' +
+        '<i class="fas fa-info-circle"></i> Description' +
+      '</div>' +
+      '<p style="margin: 0; color: #4B5563; line-height: 1.8; font-size: 1rem;">' + description + '</p>' +
+    '</div>' +
+    
+    '<div style="text-align: center;">' +
+      '<button id="subscribeBtn" onclick="toggleSubscription(\'' + areaName + '\')" style="background: linear-gradient(135deg, ' + cityColor + ', ' + cityColor + 'CC); color: white; border: none; padding: 0.8rem 2rem; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 12px ' + cityColor + '40; display: inline-flex; align-items: center; gap: 0.8rem;">' +
+        '<i class="fas fa-bell"></i>' +
+        '<span id="subscribeText">Subscribe to Alerts</span>' +
+      '</button>' +
+      '<p style="margin: 0.8rem 0 0 0; font-size: 0.85rem; color: #9CA3AF;">Get notified when traffic conditions change</p>' +
+    '</div>';
+  
+  // Show modal with animation
+  modal.style.display = 'block';
+  setTimeout(function() {
+    modal.style.opacity = '1';
+  }, 10);
+}
+
+// Toggle route subscription
+function toggleSubscription(routeName) {
+  const btn = document.getElementById('subscribeBtn');
+  const text = document.getElementById('subscribeText');
+  const icon = btn.querySelector('i');
+  
+  // Get current subscription status
+  const isSubscribed = text.textContent === 'Unsubscribe from Alerts';
+  const action = isSubscribed ? 'unsubscribe' : 'subscribe';
+  
+  // Send request
+  fetch('{% url "subscribe_route" %}', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': '{{ csrf_token }}'
+    },
+    body: JSON.stringify({
+      route_name: routeName,
+      action: action
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      // Update button
+      if (data.subscribed) {
+        text.textContent = 'Unsubscribe from Alerts';
+        icon.className = 'fas fa-bell-slash';
+        btn.style.background = 'linear-gradient(135deg, #10B981, #10B981CC)';
+      } else {
+        text.textContent = 'Subscribe to Alerts';
+        icon.className = 'fas fa-bell';
+        btn.style.background = '';
+      }
+      
+      // Show success message
+      showNotification(data.message, 'success');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    showNotification('Failed to update subscription', 'error');
+  });
+}
+
+// Show notification
+function showNotification(message, type) {
+  const notification = document.createElement('div');
+  notification.style.cssText = 'position: fixed; top: 20px; right: 20px; background: ' + (type === 'success' ? '#10B981' : '#EF4444') + '; color: white; padding: 1rem 1.5rem; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 20000; animation: slideInRight 0.3s ease;';
+  notification.innerHTML = '<i class="fas fa-' + (type === 'success' ? 'check-circle' : 'exclamation-circle') + '"></i> ' + message;
+  document.body.appendChild(notification);
+  
+  setTimeout(() => {
+    notification.style.animation = 'slideOutRight 0.3s ease';
+    setTimeout(() => notification.remove(), 300);
+  }, 3000);
+}
+
+// Close modal
+function closeTrafficDetails() {
+  var modal = document.getElementById('trafficDetailsModal');
+  modal.style.opacity = '0';
+  setTimeout(function() {
+    modal.style.display = 'none';
+  }, 300);
+}
+
+// Close modal when clicking outside
+document.getElementById('trafficDetailsModal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    closeTrafficDetails();
+  }
+});
+
+// Add hover effects to sub-area items
+document.querySelectorAll('.sub-area-item').forEach(function(item) {
+  item.addEventListener('mouseenter', function() {
+    this.style.transform = 'translateX(8px)';
+    this.style.boxShadow = '0 6px 20px rgba(0,0,0,0.12)';
+  });
+  
+  item.addEventListener('mouseleave', function() {
+    this.style.transform = 'translateX(0)';
+    this.style.boxShadow = 'none';
+  });
+});
+</script>
+
+<style>
+/* Modal Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -40%) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Close Button Hover */
+#trafficDetailsModal button:hover {
+  background: #E5E7EB !important;
+  transform: rotate(90deg);
+}
+
+/* City Section Animation */
+.city-section {
+  animation: slideInUp 0.6s ease-out backwards;
+}
+
+.city-section:nth-child(1) { animation-delay: 0.1s; }
+.city-section:nth-child(2) { animation-delay: 0.2s; }
+.city-section:nth-child(3) { animation-delay: 0.3s; }
+.city-section:nth-child(4) { animation-delay: 0.4s; }
+.city-section:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Sub-area Item Animations */
+.sub-area-item {
+  transition: all 0.3s ease;
+}
+
+.sub-area-item:hover {
+  transform: translateX(8px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+
+.sub-area-item:active {
+  transform: translateX(8px) scale(0.98);
+}
+</style>
+
+{% endblock %}
+

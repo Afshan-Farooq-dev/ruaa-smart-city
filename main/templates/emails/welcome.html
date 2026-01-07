@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+        .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
+        .button { display: inline-block; background: #667eea; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+        .features { background: white; padding: 20px; border-radius: 5px; margin: 20px 0; }
+        .feature-item { margin: 15px 0; padding-left: 25px; position: relative; }
+        .feature-item:before { content: "✓"; position: absolute; left: 0; color: #667eea; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏙️ Welcome to Smart City Saudi Arabia!</h1>
+        </div>
+        <div class="content">
+            <h2>Hello {{ user.first_name|default:user.username }}!</h2>
+            <p>Thank you for joining Smart City Saudi Arabia. We're excited to help you explore and navigate the Kingdom's major cities with ease.</p>
+            
+            <div class="features">
+                <h3>What you can do:</h3>
+                <div class="feature-item">View real-time traffic conditions across 5 major cities</div>
+                <div class="feature-item">Discover tourist attractions with interactive maps</div>
+                <div class="feature-item">Find nearby healthcare facilities and services</div>
+                <div class="feature-item">Get weather updates and personalized recommendations</div>
+                <div class="feature-item">Subscribe to traffic alerts for your favorite routes</div>
+            </div>
+            
+            <center>
+                <a href="{{ site_url }}/dashboard/" class="button">Explore Dashboard</a>
+            </center>
+            
+            <p><strong>Pro tip:</strong> Visit your <a href="{{ site_url }}/settings/">Settings</a> to customize your email notifications and subscribe to traffic alerts for routes you use frequently.</p>
+            
+            <p style="color: #666; font-size: 14px; margin-top: 30px;">
+                Questions? Reply to this email or visit our support page.<br>
+                Happy exploring!<br>
+                - The Smart City Team
+            </p>
+        </div>
+    </div>
+</body>
+</html>

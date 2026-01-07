@@ -1,0 +1,481 @@
+/* FORCE ANIMATIONS TO WORK - Override all other styles */
+
+/* Weather Page Strong Animations */
+@keyframes weatherHeroPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 12px 48px rgba(170, 45, 122, 0.15);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 16px 64px rgba(170, 45, 122, 0.35);
+  }
+}
+
+@keyframes temperatureBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@keyframes iconRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes iconFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+  }
+}
+
+/* Apply weather animations directly */
+.weather-hero {
+  animation: weatherHeroPulse 6s ease-in-out infinite !important;
+}
+
+.weather-temp {
+  animation: temperatureBounce 3s ease-in-out infinite !important;
+}
+
+.weather-icon {
+  animation: iconFloat 8s ease-in-out infinite !important;
+}
+
+.weather-icon .fas {
+  animation: iconRotate 20s linear infinite !important;
+  display: inline-block !important;
+}
+
+/* Stat cards animations */
+.stat-card {
+  animation: slideUpStrong 1.2s ease-out backwards !important;
+}
+
+@keyframes slideUpStrong {
+  from {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stat-card:nth-child(1) { animation-delay: 0.1s !important; }
+.stat-card:nth-child(2) { animation-delay: 0.2s !important; }
+.stat-card:nth-child(3) { animation-delay: 0.3s !important; }
+.stat-card:nth-child(4) { animation-delay: 0.4s !important; }
+
+/* Forecast cards */
+.forecast-card {
+  animation: scaleInStrong 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) backwards !important;
+}
+
+@keyframes scaleInStrong {
+  from {
+    opacity: 0;
+    transform: scale(0.5) rotate(-10deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* Hourly cards */
+.hourly-card {
+  animation: slideInStrong 0.6s ease-out backwards !important;
+}
+
+@keyframes slideInStrong {
+  from {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.hourly-card:nth-child(1) { animation-delay: 0.1s !important; }
+.hourly-card:nth-child(2) { animation-delay: 0.15s !important; }
+.hourly-card:nth-child(3) { animation-delay: 0.2s !important; }
+.hourly-card:nth-child(4) { animation-delay: 0.25s !important; }
+.hourly-card:nth-child(5) { animation-delay: 0.3s !important; }
+.hourly-card:nth-child(6) { animation-delay: 0.35s !important; }
+.hourly-card:nth-child(7) { animation-delay: 0.4s !important; }
+.hourly-card:nth-child(8) { animation-delay: 0.45s !important; }
+
+/* Tourism cards animations */
+.tourism-card {
+  animation: zoomInCard 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) backwards !important;
+}
+
+@keyframes zoomInCard {
+  from {
+    opacity: 0;
+    transform: scale(0.3) rotate(-20deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.tourism-card:nth-child(1) { animation-delay: 0.1s !important; }
+.tourism-card:nth-child(2) { animation-delay: 0.2s !important; }
+.tourism-card:nth-child(3) { animation-delay: 0.3s !important; }
+.tourism-card:nth-child(4) { animation-delay: 0.4s !important; }
+.tourism-card:nth-child(5) { animation-delay: 0.5s !important; }
+.tourism-card:nth-child(6) { animation-delay: 0.6s !important; }
+.tourism-card:nth-child(7) { animation-delay: 0.7s !important; }
+.tourism-card:nth-child(8) { animation-delay: 0.8s !important; }
+.tourism-card:nth-child(9) { animation-delay: 0.9s !important; }
+.tourism-card:nth-child(10) { animation-delay: 1s !important; }
+.tourism-card:nth-child(11) { animation-delay: 1.1s !important; }
+.tourism-card:nth-child(12) { animation-delay: 1.2s !important; }
+.tourism-card:nth-child(13) { animation-delay: 1.3s !important; }
+
+.tourism-card:hover {
+  animation: none !important;
+  transform: translateY(-20px) scale(1.05) !important;
+  box-shadow: 0 20px 60px rgba(45, 122, 64, 0.4) !important;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+/* Service cards animations */
+.service-item {
+  animation: bounceInCard 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) backwards !important;
+}
+
+@keyframes bounceInCard {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) translateY(100px);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1) translateY(-20px);
+  }
+  70% {
+    transform: scale(0.9) translateY(10px);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+  }
+}
+
+.service-item:hover {
+  animation: none !important;
+  transform: translateY(-15px) scale(1.05) rotate(2deg) !important;
+  box-shadow: 0 20px 60px rgba(76, 175, 80, 0.4) !important;
+}
+
+/* Emergency cards */
+.emergency-item {
+  animation: flashIn 0.8s ease-out backwards !important;
+}
+
+@keyframes flashIn {
+  0%, 50% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.emergency-item:hover {
+  animation: shake 0.5s ease-in-out !important;
+  transform: scale(1.08) !important;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0) scale(1.08); }
+  25% { transform: translateX(-10px) scale(1.08); }
+  75% { transform: translateX(10px) scale(1.08); }
+}
+
+/* Page entrance animations */
+.content-area {
+  animation: fadeInUp 1s ease-out !important;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.top-bar {
+  animation: slideDownBar 0.8s ease-out !important;
+}
+
+@keyframes slideDownBar {
+  from {
+    opacity: 0;
+    transform: translateY(-100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Card header animations */
+.card-header {
+  animation: shimmerEffect 3s ease-in-out infinite !important;
+}
+
+@keyframes shimmerEffect {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Icon animations */
+.fas, .far, .fab {
+  transition: all 0.3s ease !important;
+}
+
+.card:hover .fas,
+.service-item:hover .fas,
+.tourism-card:hover .fas {
+  transform: scale(1.3) rotate(360deg) !important;
+  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
+}
+
+/* Map marker animations */
+.custom-marker {
+  animation: dropIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
+}
+
+@keyframes dropIn {
+  from {
+    opacity: 0;
+    transform: translateY(-500px) rotate(360deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+.custom-marker:hover {
+  animation: bounce 0.6s ease-in-out !important;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-30px); }
+}
+
+/* Recommendation cards */
+.recommendation-card {
+  animation: flipIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) backwards !important;
+}
+
+@keyframes flipIn {
+  from {
+    opacity: 0;
+    transform: perspective(1000px) rotateY(90deg);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(1000px) rotateY(0deg);
+  }
+}
+
+/* Traffic Page Animations */
+@keyframes slideInFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(45, 122, 64, 0.15);
+  }
+  50% {
+    box-shadow: 0 8px 24px rgba(45, 122, 64, 0.35);
+  }
+}
+
+@keyframes statusPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+.road-item {
+  animation: slideInFromLeft 1s ease-out backwards !important;
+  transition: all 0.5s ease !important;
+}
+
+.road-item:nth-child(1) { animation-delay: 0.1s !important; }
+.road-item:nth-child(2) { animation-delay: 0.2s !important; }
+.road-item:nth-child(3) { animation-delay: 0.3s !important; }
+.road-item:nth-child(4) { animation-delay: 0.4s !important; }
+.road-item:nth-child(5) { animation-delay: 0.5s !important; }
+.road-item:nth-child(6) { animation-delay: 0.6s !important; }
+
+.road-item:hover {
+  transform: translateX(8px) scale(1.02) !important;
+  box-shadow: 0 8px 24px rgba(45, 122, 64, 0.2) !important;
+}
+
+.status-indicator {
+  animation: statusPulse 4s ease-in-out infinite !important;
+}
+
+.road-status-display {
+  animation: fadeInUp 0.8s ease-out 0.3s backwards !important;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Transportation Page Animations */
+@keyframes slideInRoute {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes iconBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.route-card {
+  animation: slideInRoute 1s cubic-bezier(0.34, 1.56, 0.64, 1) backwards !important;
+  transition: all 0.6s ease !important;
+}
+
+.route-card:nth-child(1) { animation-delay: 0.1s !important; }
+.route-card:nth-child(2) { animation-delay: 0.2s !important; }
+.route-card:nth-child(3) { animation-delay: 0.3s !important; }
+.route-card:nth-child(4) { animation-delay: 0.4s !important; }
+.route-card:nth-child(5) { animation-delay: 0.5s !important; }
+.route-card:nth-child(6) { animation-delay: 0.6s !important; }
+
+.route-card:hover {
+  transform: translateY(-12px) scale(1.03) !important;
+  box-shadow: 0 16px 48px rgba(45, 122, 64, 0.25) !important;
+}
+
+.route-icon {
+  animation: iconBounce 4s ease-in-out infinite !important;
+}
+
+.route-card:hover .route-icon {
+  animation: iconRotate 0.6s ease-in-out !important;
+}
+
+.interactive-card {
+  animation: slideInRoute 1.2s ease-out backwards !important;
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+.interactive-card:hover {
+  transform: translateY(-10px) scale(1.05) !important;
+  box-shadow: 0 16px 48px rgba(45, 122, 64, 0.3) !important;
+}
+
+.interactive-card .stat-icon {
+  transition: all 0.4s ease !important;
+}
+
+.interactive-card:hover .stat-icon {
+  transform: scale(1.2) rotate(10deg) !important;
+}
+
+.transport-section {
+  animation: fadeInUp 0.8s ease-out backwards !important;
+}
+
+.transport-section:nth-child(1) { animation-delay: 0.2s !important; }
+.transport-section:nth-child(2) { animation-delay: 0.4s !important; }
+.transport-section:nth-child(3) { animation-delay: 0.6s !important; }
+
+/* Healthcare route button hover */
+.route-button:hover {
+  transform: translateY(-3px) scale(1.02) !important;
+  box-shadow: 0 8px 24px rgba(31, 90, 48, 0.6) !important;
+}
+
+.service-item:hover .service-icon {
+  transform: scale(1.1) rotate(5deg) !important;
+  box-shadow: 0 12px 32px rgba(31, 90, 48, 0.5) !important;
+}
+
+/* Force 3 column grid */
+.tourism-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 2rem !important;
+}
+
+/* Ensure no 4th column on any screen size */
+@media (min-width: 768px) {
+  .tourism-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .tourism-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
