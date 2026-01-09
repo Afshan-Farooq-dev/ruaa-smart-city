@@ -7,6 +7,7 @@ A professional Django-based smart city management system with AI chatbot, traffi
 For detailed installation instructions, see **INSTALLATION_GUIDE.txt**
 
 ### Basic Steps:
+
 1. Install Python 3.10+
 2. Extract project files
 3. Run: `pip install -r requirements.txt`
@@ -60,28 +61,31 @@ ruaa_smart_city/
 ## Configuration
 
 The `.env` file contains:
+
 - `GROQ_API_KEY`: Your Groq API key
 - `GROQ_MODEL`: AI model (llama-3.1-8b-instant)
 
 ## User Accounts
 
 ### Regular Users:
+
 - Signup at: http://127.0.0.1:8000/signup/
 - Simple password requirements (easy registration)
 
 ### Admin Access:
+
 - Create superuser: `python manage.py createsuperuser`
 - Access at: http://127.0.0.1:8000/admin/
 
 ## Main Pages
 
-| Page | URL | Description |
-|------|-----|-------------|
+| Page      | URL           | Description          |
+| --------- | ------------- | -------------------- |
 | Dashboard | `/dashboard/` | AI chatbot interface |
-| Traffic | `/traffic/` | Live traffic status |
-| Weather | `/weather/` | Weather forecasts |
-| Services | `/services/` | Public facilities |
-| Map | `/map/` | Interactive city map |
+| Traffic   | `/traffic/`   | Live traffic status  |
+| Weather   | `/weather/`   | Weather forecasts    |
+| Services  | `/services/`  | Public facilities    |
+| Map       | `/map/`       | Interactive city map |
 
 ## Requirements
 
@@ -99,3 +103,5 @@ For questions or issues, contact the project administrator.
 **Version**: 1.0.0  
 **License**: MIT  
 **Developed**: 2025
+
+<h3>Developed by afshan-farooq</h3>
