@@ -2,6 +2,10 @@
 
 A professional Django-based smart city management system with AI chatbot, traffic monitoring, weather forecasts, and interactive maps.
 
+## 🚀 New Feature Branch
+
+This is the feature1 branch - created for practicing Git and GitHub workflows!
+
 ## Quick Start
 
 For detailed installation instructions, see **INSTALLATION_GUIDE.txt**
