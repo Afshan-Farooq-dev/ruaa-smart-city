@@ -68,6 +68,11 @@
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Feature2 Enhancement - Improved Animations */
+  --transition-smooth: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  --hover-scale: 1.02;
+  --card-hover-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
 }
 
 /* ================================

@@ -1,5 +1,10 @@
+// ===================================
+// FEATURE2 BRANCH - Enhanced UI
+// Improved user interactions
+// ===================================
+
 // Enhanced interactivity for Tourism page: modal, filtering, facts, reactions
-console.log('Ruaa Smart City app loaded');
+console.log('Ruaa Smart City app loaded - Feature2 Branch');
 
 document.addEventListener('DOMContentLoaded', function () {
 	// Bootstrap modal element
