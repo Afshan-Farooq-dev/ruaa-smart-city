@@ -109,3 +109,8 @@ For questions or issues, contact the project administrator.
 **Developed**: 2025
 
 <h3>Developed by afshan-farooq</h3>
+
+  (•_•)
+ <)   )╯  "It worked on my machine"
+  /   \
+
